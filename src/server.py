@@ -239,7 +239,7 @@ def format_guide(drug_info, personal_summary: str) -> str:
 
 @app.get("/", response_class=HTMLResponse)
 async def index():
-    html_path = os.path.join(os.path.dirname(__file__), "index.html")
+    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
     with open(html_path, "r") as f:
         return f.read()
 

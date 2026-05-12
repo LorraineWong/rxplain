@@ -45,10 +45,10 @@ class DrugInfo(BaseModel):
     drug_class: str
     dosage_instructions: List[DosageInstruction]
     side_effects: List[SideEffect]
-    food_interactions: List[FoodInteraction]
-    warnings: List[Warning]
-    contraindications: List[str]
-    emergency_signs: List[str]
+    food_interactions: List[FoodInteraction] = Field(default_factory=list)
+    warnings: List[Warning] = Field(default_factory=list)
+    contraindications: List[str] = Field(default_factory=list)
+    emergency_signs: List[str] = Field(default_factory=list)
 
 
 class UserProfile(BaseModel):
