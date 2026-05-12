@@ -136,19 +136,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   <div class="header">
     <div class="header-icon">💊</div>
     <div class="header-title">Legimed</div>
-    <div class="header-sub">Turn any medicine into a clear,<br>personalised patient guide.</div>
+    <div class="header-sub">Build a temporary health profile,<br>scan a medicine, and get a personalized guide.</div>
   </div>
 
   <!-- Step 1: Profile -->
   <div class="step-hdr">
     <div class="step-num">1</div>
     <div>
-      <div class="step-title">Your health profile</div>
-      <div class="step-sub">Used to prioritise warnings. Nothing is stored.</div>
+      <div class="step-title">Temporary Health Profile</div>
+      <div class="step-sub">Used only for this guide. Not stored or saved.</div>
     </div>
   </div>
   <div class="card">
-    <div class="field-label">Age group</div>
+    <div class="field-label">Age Group</div>
     <div class="pill-group" id="age-group">
       <button class="pill" onclick="setAge('child')">Child</button>
       <button class="pill active" onclick="setAge('adult')">Adult</button>
@@ -162,7 +162,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     </div>
 
     <button class="accordion-toggle" onclick="toggleAccordion()">
-      <span>Medical conditions</span>
+      <span>Medical Conditions</span>
       <span id="accordion-icon">▼</span>
     </button>
     <div class="accordion-body" id="accordion-body">
@@ -184,17 +184,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
         <button class="cond-btn"
           onclick="toggleCond(this,'liver_issue')">🫀 Liver</button>
       </div>
-      <div class="field-label">Other conditions</div>
+      <div class="field-label">Other Conditions</div>
       <input class="field-input" id="other-conditions" type="text"
         placeholder="e.g. G6PD deficiency, thyroid disorder"
         style="margin-bottom:10px;" oninput="sync()"/>
     </div>
 
-    <div class="field-label" style="margin-top:4px;">Known allergies</div>
+    <div class="field-label" style="margin-top:4px;">Known Allergies</div>
     <input class="field-input" id="allergies" type="text"
       placeholder="e.g. penicillin, sulfa, aspirin"
       style="margin-bottom:10px;" oninput="sync()"/>
-    <div class="field-label">Current medications</div>
+    <div class="field-label">Current Medications</div>
     <input class="field-input" id="other-medications" type="text"
       placeholder="e.g. aspirin, metformin, lisinopril" oninput="sync()"/>
   </div>
@@ -203,8 +203,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   <div class="step-hdr">
     <div class="step-num">2</div>
     <div>
-      <div class="step-title">Your medication</div>
-      <div class="step-sub">Scan the box or type the medicine name.</div>
+      <div class="step-title">Medicine</div>
+      <div class="step-sub">Scan a box or enter the name manually.</div>
     </div>
   </div>
   <div class="card">
@@ -223,9 +223,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     <input type="file" id="file-input" accept="image/*"
       style="display:none;" onchange="handleFile(this)"/>
     <button class="btn-scan" id="scan-btn" onclick="doScan()" disabled>
-      🔍 Scan image</button>
+      🔍 Scan Image</button>
     <div class="status" id="scan-status"></div>
-    <div class="field-label" style="margin-top:6px;">Medicine name</div>
+    <div class="field-label" style="margin-top:6px;">Medicine Name</div>
     <input class="field-input" id="drug-name" type="text"
       placeholder="Auto-filled after scan, or type here" oninput="sync()"/>
     <div class="tip">
@@ -239,15 +239,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   <div class="step-hdr">
     <div class="step-num">3</div>
     <div>
-      <div class="step-title">Generate your guide</div>
-      <div class="step-sub">Review the medicine name, then tap the button.</div>
+      <div class="step-title">Generate Guide</div>
+      <div class="step-sub">This uses your temporary profile to prioritize warnings.</div>
     </div>
   </div>
   <button class="btn-generate" id="gen-btn" onclick="doGenerate()">
-    Generate my guide →</button>
+    Generate Guide →</button>
 
   <div style="font-size:13px;font-weight:700;color:#1A202C;margin:16px 0 8px;">
-    Your guide</div>
+    Your Guide</div>
   <div id="output">
     <div class="output-empty">
       <div style="font-size:32px;margin-bottom:8px;">🧾</div>
@@ -385,7 +385,7 @@ function doScan() {
   .then(function(r) { return r.json(); })
   .then(function(data) {
     btn.disabled = false;
-    btn.textContent = '🔍 Scan image';
+    btn.textContent = '🔍 Scan Image';
     if (data.ok && data.drug_name) {
       document.getElementById('drug-name').value = data.drug_name;
       state.drug_name = data.drug_name;
@@ -400,7 +400,7 @@ function doScan() {
   })
   .catch(function(err) {
     btn.disabled = false;
-    btn.textContent = '🔍 Scan image';
+    btn.textContent = '🔍 Scan Image';
     showStatus('scan-status', 'error', '❌ Scan error: ' + err.message);
   });
 }

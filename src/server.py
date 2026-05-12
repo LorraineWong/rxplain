@@ -134,9 +134,9 @@ def format_guide(drug_info, personal_summary: str) -> str:
     # Summary
     if personal_summary:
         parts.append(card(
-            slabel("📋 Your Summary") +
-            f'<div style="font-size:13px;color:#1A202C;line-height:1.75;background:#ECFDF5;'
-            f'border-radius:10px;padding:12px;border-left:3px solid #00A878;">'
+            slabel("Key Summary") +
+            f'<div style="font-size:14px;font-weight:600;color:#1A202C;line-height:1.75;background:#ECFDF5;'
+            f'border-radius:10px;padding:12px 13px;border-left:3px solid #00A878;">'
             f'{e(personal_summary)}</div>'
         ))
 
@@ -163,7 +163,7 @@ def format_guide(drug_info, personal_summary: str) -> str:
                      f'<div style="font-size:12px;color:#CBD5E1;margin-top:2px;">—</div></div>')
     grid += '</div>'
     parts.append(card(
-        slabel("⏰ Label Timing Summary") +
+        slabel("Label Timing") +
         grid +
         '<div style="font-size:10px;color:#64748B;line-height:1.5;margin-top:8px;">'
         'Verify dose and timing with your prescription label or pharmacist.</div>'
@@ -218,7 +218,7 @@ def format_guide(drug_info, personal_summary: str) -> str:
             text = _truncate(w.text, 120)
             w_rows += (f'<div style="font-size:12px;color:#78350F;padding:5px 0;'
                        f'border-bottom:1px solid #FDE68A;line-height:1.6;">• {e(text)}</div>')
-        parts.append(card(slabel("⚠️ Warnings", "#B45309") + w_rows,
+        parts.append(card(slabel("Warnings", "#B45309") + w_rows,
                           bg="#FFFBEB", border="#FDE68A"))
 
     # Emergency
@@ -228,7 +228,7 @@ def format_guide(drug_info, personal_summary: str) -> str:
             f'<div style="font-size:12px;color:#7F1D1D;padding:3px 0;line-height:1.6;">• {e(s)}</div>'
             for s in emergency[:3]
         )
-        parts.append(card(slabel("🚨 Seek Help Immediately If:", "#B91C1C") + e_rows,
+        parts.append(card(slabel("Emergency Signs", "#B91C1C") + e_rows,
                           bg="#FEF2F2", border="#FCA5A5"))
 
     parts.append(
