@@ -222,7 +222,7 @@ def format_guide(drug_info, personal_summary: str) -> str:
                           bg="#FFFBEB", border="#FDE68A"))
 
     # Emergency
-    emergency = drug_info.emergency_signs or []
+    emergency = [s for s in (drug_info.emergency_signs or []) if str(s).strip()]
     if emergency:
         e_rows = "".join(
             f'<div style="font-size:12px;color:#7F1D1D;padding:3px 0;line-height:1.6;">• {e(s)}</div>'

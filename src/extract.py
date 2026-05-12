@@ -107,6 +107,7 @@ STRICT OUTPUT RULES:
 - side_effects severity MUST be exactly one of: HIGH, MEDIUM, LOW
 - time_of_day MUST be exactly one of: morning, afternoon, evening, bedtime
 - amount MUST be a clean dosage string like "5 mg", "1 tablet", "2-10 mg".
+- drug_class MUST be the most specific pharmacologic class supported by the label, such as "Vitamin K antagonist" instead of only "Anticoagulant" for warfarin.
 - Extract AT LEAST 3 side_effects with different severity levels:
   - At least one HIGH severity effect that can be life-threatening.
   - At least one MEDIUM severity effect that requires calling a doctor.
@@ -116,7 +117,7 @@ STRICT OUTPUT RULES:
 - For warfarin-class anticoagulants, include clinically relevant food or drink examples when supported by the leaflet: green leafy vegetables such as spinach, kale, or broccoli; grapefruit; and alcohol. The action must reflect clinical guidance.
 - warning text MUST be plain English for a patient with no medical background, written as complete readable sentences, with at least 2 sentences per warning. Do not use ALL CAPS.
 - Extract AT LEAST 3 warnings as complete patient-facing warnings.
-- emergency_signs must be real medical emergencies only, written as specific observable symptoms a patient can recognise at home, such as "Coughing or vomiting blood", "Black or tarry stools", "Sudden severe headache", or "Unexplained bruising". Do not use generic phrases like "signs and symptoms of bleeding".
+- emergency_signs MUST contain AT LEAST 3 real medical emergencies, written as specific observable symptoms a patient can recognise at home, such as "Coughing or vomiting blood", "Black or tarry stools", "Sudden severe headache", or "Unexplained bruising". Do not use generic phrases like "signs and symptoms of bleeding".
 
 JSON SCHEMA:
 {schema}
@@ -175,6 +176,11 @@ JSON OUTPUT:"""
             w["text"] = text.capitalize()
 
     _cleanup_generated_text(data)
+
+    emergency_signs = [s for s in data.get("emergency_signs", []) if isinstance(s, str) and s.strip()]
+    if len(emergency_signs) < 3:
+        raise ValueError("Gemma extraction failed: emergency_signs must contain at least 3 specific symptoms.")
+    data["emergency_signs"] = emergency_signs
 
     # Remove duplicate warnings
     seen = set()
