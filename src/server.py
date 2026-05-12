@@ -231,13 +231,6 @@ def format_guide(drug_info, personal_summary: str) -> str:
         parts.append(card(slabel("Emergency Signs", "#B91C1C") + e_rows,
                           bg="#FEF2F2", border="#FCA5A5"))
 
-    parts.append(
-        '<div style="text-align:center;padding-top:6px;">'
-        '<div style="font-size:10px;color:#9CA3AF;line-height:1.7;">'
-        'Powered by Gemma 4 · NIH DailyMed<br>'
-        'For reference only · Always consult your doctor or pharmacist'
-        '</div></div>'
-    )
     return "".join(parts)
 
 

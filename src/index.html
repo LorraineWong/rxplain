@@ -123,9 +123,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
      border-radius:10px;padding:8px 10px;margin-top:6px;line-height:1.6;}
 .tip strong{color:#047857;}
 
+/* Header tagline & badge */
+.header-tagline{font-size:16px;font-weight:700;color:#047857;
+                margin-top:6px;letter-spacing:-0.01em;}
+.gemma-badge{display:inline-flex;align-items:center;gap:4px;
+             background:#ECFDF5;border:1px solid #A7F3D0;border-radius:999px;
+             padding:3px 10px;font-size:11px;font-weight:600;color:#047857;
+             margin-top:8px;}
+
+/* Section title */
+.section-title{font-size:13px;font-weight:800;color:#1A202C;
+               letter-spacing:-0.01em;margin:20px 0 8px;
+               display:flex;align-items:center;gap:6px;}
+.section-title::before{content:'';flex:0 0 3px;height:14px;
+                        background:#00A878;border-radius:2px;}
+
 /* Footer */
-.footer{text-align:center;padding:16px 0 4px;
-        font-size:10px;color:#9CA3AF;line-height:1.7;}
+.footer{text-align:center;padding:20px 0 4px;line-height:1.7;}
+.footer-disclaimer{font-size:11px;color:#6B7280;margin-bottom:4px;}
+.footer-attr{font-size:10px;color:#9CA3AF;}
 .footer a{color:#00A878;text-decoration:none;font-weight:600;}
 </style>
 </head>
@@ -136,7 +152,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   <div class="header">
     <div class="header-icon">💊</div>
     <div class="header-title">Legimed</div>
-    <div class="header-sub">Build a temporary health profile,<br>scan a medicine, and get a personalized guide.</div>
+    <div class="header-tagline">Your Medication, Made Legible</div>
+    <div class="header-sub">Build a health profile, scan a medicine,<br>and get a plain-language personalized guide.</div>
+    <div class="gemma-badge">✨ Powered by Gemma 4</div>
   </div>
 
   <!-- Step 1: Profile -->
@@ -150,9 +168,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   <div class="card">
     <div class="field-label">Age Group</div>
     <div class="pill-group" id="age-group">
-      <button class="pill" onclick="setAge('child')">Child</button>
-      <button class="pill active" onclick="setAge('adult')">Adult</button>
-      <button class="pill" onclick="setAge('elderly')">Elderly</button>
+      <button class="pill" onclick="setAge('child')">Child &lt;18</button>
+      <button class="pill active" onclick="setAge('adult')">Adult 18–64</button>
+      <button class="pill" onclick="setAge('elderly')">Elderly 65+</button>
     </div>
     <div class="field-label">Sex</div>
     <div class="pill-group" id="sex-group">
@@ -160,37 +178,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       <button class="pill" onclick="setSex('female')">Female</button>
       <button class="pill active" onclick="setSex('prefer_not_to_say')">Not specified</button>
     </div>
-
-    <button class="accordion-toggle" onclick="toggleAccordion()">
-      <span>Medical Conditions</span>
-      <span id="accordion-icon">▼</span>
-    </button>
-    <div class="accordion-body" id="accordion-body">
-      <div class="cond-grid">
-        <button class="cond-btn hidden" id="btn-pregnant"
-          onclick="toggleCond(this,'pregnant')">🤰 Pregnant</button>
-        <button class="cond-btn hidden" id="btn-breastfeeding"
-          onclick="toggleCond(this,'breastfeeding')">🍼 Breastfeeding</button>
-        <button class="cond-btn"
-          onclick="toggleCond(this,'heart_condition')">❤️ Heart disease</button>
-        <button class="cond-btn"
-          onclick="toggleCond(this,'diabetes')">🩸 Diabetes</button>
-        <button class="cond-btn"
-          onclick="toggleCond(this,'hypertension')">💉 Hypertension</button>
-        <button class="cond-btn"
-          onclick="toggleCond(this,'asthma')">🫁 Asthma</button>
-        <button class="cond-btn"
-          onclick="toggleCond(this,'kidney_issue')">🫘 Kidney</button>
-        <button class="cond-btn"
-          onclick="toggleCond(this,'liver_issue')">🫀 Liver</button>
-      </div>
-      <div class="field-label">Other Conditions</div>
-      <input class="field-input" id="other-conditions" type="text"
-        placeholder="e.g. G6PD deficiency, thyroid disorder"
-        style="margin-bottom:10px;" oninput="sync()"/>
+  </div>
+  <div class="card">
+    <div class="field-label" style="margin-bottom:2px;">Medical Conditions</div>
+    <div style="font-size:11px;color:#9CA3AF;margin-bottom:10px;">Select all that apply</div>
+    <div class="cond-grid">
+      <button class="cond-btn hidden" id="btn-pregnant"
+        onclick="toggleCond(this,'pregnant')">🤰 Pregnant</button>
+      <button class="cond-btn hidden" id="btn-breastfeeding"
+        onclick="toggleCond(this,'breastfeeding')">🍼 Breastfeeding</button>
+      <button class="cond-btn"
+        onclick="toggleCond(this,'heart_condition')">❤️ Heart disease</button>
+      <button class="cond-btn"
+        onclick="toggleCond(this,'diabetes')">🩸 Diabetes</button>
+      <button class="cond-btn"
+        onclick="toggleCond(this,'hypertension')">🩺 Hypertension</button>
+      <button class="cond-btn"
+        onclick="toggleCond(this,'asthma')">🫁 Asthma</button>
+      <button class="cond-btn"
+        onclick="toggleCond(this,'kidney_issue')">🫘 Kidney disease</button>
+      <button class="cond-btn"
+        onclick="toggleCond(this,'liver_issue')">🟡 Liver disease</button>
     </div>
-
-    <div class="field-label" style="margin-top:4px;">Known Allergies</div>
+    <div class="field-label" style="margin-top:12px;">Other Conditions</div>
+    <input class="field-input" id="other-conditions" type="text"
+      placeholder="e.g. G6PD deficiency, thyroid disorder"
+      style="margin-bottom:10px;" oninput="sync()"/>
+    <div class="field-label">Known Allergies</div>
     <input class="field-input" id="allergies" type="text"
       placeholder="e.g. penicillin, sulfa, aspirin"
       style="margin-bottom:10px;" oninput="sync()"/>
@@ -209,17 +223,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   </div>
   <div class="card">
     <div class="upload-area" id="upload-area"
-      onclick="document.getElementById('file-input').click()"
       ondragover="event.preventDefault();this.classList.add('dragover')"
       ondragleave="this.classList.remove('dragover')"
       ondrop="handleDrop(event)">
       <img id="upload-preview" class="upload-preview" src="" alt="preview"/>
       <div id="upload-placeholder" class="upload-placeholder">
-        <div class="upload-icon">📷</div>
-        <div>Tap to upload photo or drag & drop</div>
-        <div style="font-size:11px;color:#94A3B8;margin-top:4px;">JPG · PNG · WEBP</div>
+        <div style="display:flex;justify-content:center;">
+          <div onclick="document.getElementById('camera-input').click()"
+            style="flex:1;padding:14px 8px;cursor:pointer;border-right:1px solid #D1FAE5;
+                   border-radius:12px 0 0 12px;transition:background .15s;"
+            onmouseover="this.style.background='#ECFDF5'"
+            onmouseout="this.style.background=''">
+            <div style="font-size:26px;">📷</div>
+            <div style="font-size:12px;font-weight:600;color:#047857;margin-top:4px;">Take Photo</div>
+          </div>
+          <div onclick="document.getElementById('file-input').click()"
+            style="flex:1;padding:14px 8px;cursor:pointer;
+                   border-radius:0 12px 12px 0;transition:background .15s;"
+            onmouseover="this.style.background='#ECFDF5'"
+            onmouseout="this.style.background=''">
+            <div style="font-size:26px;">🖼️</div>
+            <div style="font-size:12px;font-weight:600;color:#047857;margin-top:4px;">Upload Image</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:#94A3B8;margin-top:10px;">JPG · PNG · WEBP</div>
       </div>
     </div>
+    <input type="file" id="camera-input" accept="image/*" capture="environment"
+      style="display:none;" onchange="handleFile(this)"/>
     <input type="file" id="file-input" accept="image/*"
       style="display:none;" onchange="handleFile(this)"/>
     <button class="btn-scan" id="scan-btn" onclick="doScan()" disabled>
@@ -229,28 +260,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     <input class="field-input" id="drug-name" type="text"
       placeholder="Auto-filled after scan, or type here" oninput="sync()"/>
     <div class="tip">
-      💡 DailyMed works best with generic names.
-      Try <strong>paracetamol</strong> instead of Panadol,
-      or <strong>ibuprofen</strong> instead of Advil.
+      💡 Enter the ingredient name, not the brand name —
+      try <strong>paracetamol</strong> (not Panadol)
+      or <strong>ibuprofen</strong> (not Advil).
     </div>
   </div>
 
-  <!-- Step 3: Generate -->
-  <div class="step-hdr">
-    <div class="step-num">3</div>
-    <div>
-      <div class="step-title">Generate Guide</div>
-      <div class="step-sub">This uses your temporary profile to prioritize warnings.</div>
-    </div>
-  </div>
-  <button class="btn-generate" id="gen-btn" onclick="doGenerate()">
+  <button class="btn-generate" id="gen-btn" onclick="doGenerate()" style="margin-top:8px;">
     Generate Guide →</button>
 
-  <div style="font-size:13px;font-weight:700;color:#1A202C;margin:16px 0 8px;">
-    Your Guide</div>
+  <div class="section-title">Your Guide</div>
   <div id="output">
     <div class="output-empty">
-      <div style="font-size:32px;margin-bottom:8px;">🧾</div>
+      <div style="font-size:32px;margin-bottom:8px;">📋</div>
       <div style="font-size:15px;font-weight:700;color:#1A202C;margin-bottom:6px;">
         Your guide will appear here</div>
       <div style="font-size:13px;line-height:1.6;">
@@ -259,9 +281,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   </div>
 
   <div class="footer">
-    Gemma 4 · NIH DailyMed · Apache 2.0 ·
-    <a href="https://github.com/LorraineWong/legimed">GitHub</a><br>
-    For reference only. Always consult a healthcare professional.
+    <div class="footer-disclaimer">For reference only. Always consult a healthcare professional.</div>
+    <div class="footer-attr">Gemma 4 · NIH DailyMed · Apache 2.0 · <a href="https://github.com/LorraineWong/legimed">GitHub</a></div>
   </div>
 
 </div>
@@ -311,13 +332,6 @@ function setSex(v) {
 function toggleCond(btn, key) {
   state[key] = !state[key];
   btn.classList.toggle('active', state[key]);
-}
-
-function toggleAccordion() {
-  var body = document.getElementById('accordion-body');
-  var icon = document.getElementById('accordion-icon');
-  var open = body.classList.toggle('open');
-  icon.textContent = open ? '▲' : '▼';
 }
 
 function sync() {
@@ -448,7 +462,7 @@ function doGenerate() {
   .then(function(r) { return r.json(); })
   .then(function(data) {
     btn.disabled = false;
-    btn.textContent = 'Generate my guide →';
+    btn.textContent = 'Generate Guide →';
     if (data.ok) {
       document.getElementById('output').innerHTML = data.html;
     } else {
@@ -459,7 +473,7 @@ function doGenerate() {
   })
   .catch(function(err) {
     btn.disabled = false;
-    btn.textContent = 'Generate my guide →';
+    btn.textContent = 'Generate Guide →';
     document.getElementById('output').innerHTML =
       '<div style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:12px;' +
       'padding:12px 14px;font-size:13px;color:#991B1B;">❌ Error: ' + err.message + '</div>';
