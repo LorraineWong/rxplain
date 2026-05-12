@@ -1,18 +1,15 @@
+# extract.py - Drug info extraction pipeline using local Gemma 4 inference
+
 import json
 import re
-import os
-import google.generativeai as genai
+import torch
 from schema import DrugInfo
 
-# Configure Gemini API
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-2.0-flash")
 
-
-def extract_drug_info_robust(leaflet_text: str, _model=None, _processor=None) -> DrugInfo:
+def extract_drug_info_robust(leaflet_text: str, model, processor) -> DrugInfo:
     """
-    Extract DrugInfo from leaflet text using Gemini API.
-    _model and _processor are kept for API compatibility but not used.
+    Extract DrugInfo from leaflet text using local Gemma 4 model.
+    Returns a validated DrugInfo pydantic object.
     """
     schema = json.dumps(DrugInfo.model_json_schema(), indent=2)
 
@@ -23,12 +20,12 @@ STRICT OUTPUT RULES:
 - food_interactions action MUST be exactly one of: avoid, caution, ok
 - side_effects severity MUST be exactly one of: HIGH, MEDIUM, LOW
 - time_of_day MUST be exactly one of: morning, afternoon, evening, bedtime
-- amount MUST be a clean dosage string like "5 mg", "1 tablet", "2-10 mg". No garbled text.
-- warning text MUST be a complete readable sentence in plain English. Never ALL CAPS only.
-- Extract AT LEAST 3 side_effects with different severity levels and distinct descriptions.
-- Extract AT LEAST 3 food_interactions. Include only actual foods, drinks, or dietary supplements.
+- amount MUST be a clean dosage string like "5 mg", "1 tablet", "2-10 mg".
+- warning text MUST be a complete readable sentence in plain English.
+- Extract AT LEAST 3 side_effects with different severity levels.
+- Extract AT LEAST 3 food_interactions with actual foods or drinks only.
 - Extract AT LEAST 3 warnings as complete sentences.
-- emergency_signs must be real medical emergencies only (e.g. severe bleeding, anaphylaxis).
+- emergency_signs must be real medical emergencies only.
 
 JSON SCHEMA:
 {schema}
@@ -38,14 +35,30 @@ LEAFLET TEXT:
 
 JSON OUTPUT:"""
 
-    response = model.generate_content(prompt)
-    cleaned = response.text.strip()
-    cleaned = re.sub(r'^```json\s*', '', cleaned)
-    cleaned = re.sub(r'^```\s*', '', cleaned)
-    cleaned = re.sub(r'\s*```$', '', cleaned)
-    cleaned = cleaned.strip()
+    messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
 
-    data = json.loads(cleaned)
+    inputs = processor.apply_chat_template(
+        messages,
+        add_generation_prompt=True,
+        tokenize=True,
+        return_tensors="pt",
+        return_dict=True
+    ).to(model.device)
+
+    with torch.inference_mode():
+        output = model.generate(**inputs, max_new_tokens=2048, do_sample=False)
+
+    # Decode only the newly generated tokens
+    input_len = inputs["input_ids"].shape[-1]
+    raw = processor.decode(output[0][input_len:], skip_special_tokens=True).strip()
+
+    # Strip markdown code fences if present
+    raw = re.sub(r'^```json\s*', '', raw)
+    raw = re.sub(r'^```\s*', '', raw)
+    raw = re.sub(r'\s*```$', '', raw)
+    raw = raw.strip()
+
+    data = json.loads(raw)
 
     # Auto-correct food_interactions action
     valid_actions = ["avoid", "caution", "ok"]
@@ -70,7 +83,7 @@ JSON OUTPUT:"""
         if di.get("time_of_day") not in valid_times:
             di["time_of_day"] = "morning"
 
-    # Normalise warning text
+    # Normalise ALL-CAPS warning text
     for w in data.get("warnings", []):
         text = w.get("text", "")
         if text == text.upper() and len(text) > 3:
