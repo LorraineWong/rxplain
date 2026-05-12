@@ -24,6 +24,44 @@ def fetch_leaflet_text(set_id: str) -> str:
     return text[:12000]
 
 
+def preprocess_leaflet(text: str) -> str:
+    """Extract the most relevant safety and dosing sections from leaflet text."""
+    keywords = [
+        "warnings",
+        "adverse reactions",
+        "side effects",
+        "drug interactions",
+        "food",
+        "contraindications",
+        "dosage",
+        "overdose",
+        "precautions",
+        "emergency",
+    ]
+    lower_text = text.lower()
+    spans = []
+
+    for keyword in keywords:
+        for match in re.finditer(re.escape(keyword), lower_text, flags=re.IGNORECASE):
+            start = match.start()
+            end = min(len(text), start + 800)
+            spans.append((start, end))
+
+    if not spans:
+        return text[:6000]
+
+    spans.sort()
+    merged = []
+    for start, end in spans:
+        if not merged or start > merged[-1][1]:
+            merged.append([start, end])
+        else:
+            merged[-1][1] = max(merged[-1][1], end)
+
+    sections = [text[start:end].strip() for start, end in merged if text[start:end].strip()]
+    return "\n\n".join(sections)[:6000]
+
+
 def get_drug_leaflet(drug_name: str) -> str:
     """Main function: drug name -> full leaflet text."""
     print(f"Searching DailyMed for: {drug_name}...")
@@ -33,5 +71,6 @@ def get_drug_leaflet(drug_name: str) -> str:
         return None
     print(f"Found DailyMed label: {result.get('title')} [{result.get('setid')}]")
     leaflet_text = fetch_leaflet_text(result.get("setid"))
-    print(f"Retrieved {len(leaflet_text)} characters.")
-    return leaflet_text
+    processed_text = preprocess_leaflet(leaflet_text)
+    print(f"Retrieved {len(leaflet_text)} characters, using {len(processed_text)} relevant characters.")
+    return processed_text

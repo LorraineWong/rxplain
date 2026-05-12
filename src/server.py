@@ -127,7 +127,7 @@ def format_guide(drug_info, personal_summary: str) -> str:
             f'{e(personal_summary)}</div>'
         ))
 
-    # When to take
+    # Label timing summary
     time_slots = {"morning": ("🌅", "Morning"), "afternoon": ("☀️", "Afternoon"),
                   "evening": ("🌆", "Evening"), "bedtime": ("🌙", "Bedtime")}
     dose_map = {d.time_of_day: d for d in (drug_info.dosage_instructions or [])}
@@ -149,7 +149,12 @@ def format_guide(drug_info, personal_summary: str) -> str:
                      f'<div style="font-size:9px;color:#94A3B8;margin-top:2px;">{label}</div>'
                      f'<div style="font-size:12px;color:#CBD5E1;margin-top:2px;">—</div></div>')
     grid += '</div>'
-    parts.append(card(slabel("⏰ When to Take") + grid))
+    parts.append(card(
+        slabel("⏰ Label Timing Summary") +
+        grid +
+        '<div style="font-size:10px;color:#64748B;line-height:1.5;margin-top:8px;">'
+        'Verify dose and timing with your prescription label or pharmacist.</div>'
+    ))
 
     # Side effects
     side_effects = sorted(

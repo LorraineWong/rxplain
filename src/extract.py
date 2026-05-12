@@ -37,19 +37,25 @@ def extract_drug_info_robust(leaflet_text: str, model, processor) -> DrugInfo:
     """
     schema = json.dumps(DrugInfo.model_json_schema(), indent=2)
 
-    prompt = f"""You are a clinical pharmacist AI. Extract medication information from the leaflet below.
+    prompt = f"""You are a clinical pharmacist AI with expertise in drug safety. Extract medication information from the leaflet below.
 
 STRICT OUTPUT RULES:
 - Output ONLY valid JSON matching the schema. No markdown, no code blocks, no explanation.
+- Extract SPECIFIC and CLINICALLY ACCURATE information only. Never use generic placeholder text.
 - food_interactions action MUST be exactly one of: avoid, caution, ok
 - side_effects severity MUST be exactly one of: HIGH, MEDIUM, LOW
 - time_of_day MUST be exactly one of: morning, afternoon, evening, bedtime
 - amount MUST be a clean dosage string like "5 mg", "1 tablet", "2-10 mg".
-- warning text MUST be a complete readable sentence in plain English.
-- Extract AT LEAST 3 side_effects with different severity levels.
-- Extract AT LEAST 3 food_interactions with actual foods or drinks only.
-- Extract AT LEAST 3 warnings as complete sentences.
-- emergency_signs must be real medical emergencies only.
+- Extract AT LEAST 3 side_effects with different severity levels:
+  - At least one HIGH severity effect that can be life-threatening.
+  - At least one MEDIUM severity effect that requires calling a doctor.
+  - At least one LOW severity effect that can usually be monitored at home.
+- Each side_effect description MUST describe what the patient may notice or experience, such as "You may notice unusual bruising or bleeding that does not stop"; do not write vague phrases like "may cause bleeding complications".
+- Extract AT LEAST 3 food_interactions with actual foods or drinks only. Do NOT include drugs, medications, supplements, or medication classes.
+- For warfarin-class anticoagulants, include clinically relevant food or drink examples when supported by the leaflet: green leafy vegetables such as spinach, kale, or broccoli; grapefruit; and alcohol. The action must reflect clinical guidance.
+- warning text MUST be plain English for a patient with no medical background, written as complete readable sentences, with at least 2 sentences per warning. Do not use ALL CAPS.
+- Extract AT LEAST 3 warnings as complete patient-facing warnings.
+- emergency_signs must be real medical emergencies only, written as specific observable symptoms a patient can recognise at home, such as "Coughing or vomiting blood", "Black or tarry stools", "Sudden severe headache", or "Unexplained bruising". Do not use generic phrases like "signs and symptoms of bleeding".
 
 JSON SCHEMA:
 {schema}
