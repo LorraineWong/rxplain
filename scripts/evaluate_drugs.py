@@ -58,9 +58,12 @@ def evaluate_drugs(
         raise ValueError("evaluate_drugs requires a loaded Gemma model and processor.")
 
     profile = profile or UserProfile(age_group="adult")
+    drug_names = list(drug_names)
     results = []
+    total = len(drug_names)
 
-    for name in drug_names:
+    for i, name in enumerate(drug_names, 1):
+        print(f"\n[{i}/{total}] Testing: {name} ...")
         started = time.time()
         row = {
             "drug_name": name,
@@ -86,24 +89,32 @@ def evaluate_drugs(
             guide_html = format_guide(drug_info, summary)
             row["guide_generated"] = bool(guide_html)
         except Exception as exc:
-            row["error"] = str(exc)
+            row["error"] = str(exc)[:80]
         finally:
             row["seconds"] = round(time.time() - started, 2)
             results.append(row)
-            print(json.dumps(row, ensure_ascii=False))
+            status = "✅" if row["guide_generated"] else "❌"
+            print(f"  {status} {row['seconds']}s{' — ' + row['error'] if row['error'] else ''}")
 
+    succeeded = sum(1 for r in results if r["guide_generated"])
+    print(f"\n{'='*40}")
+    print(f"Result: {succeeded}/{total} guides generated successfully.")
     return results
 
 
 def print_markdown_table(results: list[dict]) -> None:
     """Print results in a format suitable for README or Kaggle writeup."""
+    def _bool(v: bool) -> str:
+        return "✅" if v else "❌"
+
     print("| Drug | DailyMed | JSON valid | Guide | Seconds | Error |")
-    print("|---|---:|---:|---:|---:|---|")
+    print("|---|:---:|:---:|:---:|---:|---|")
     for row in results:
+        error = (row["error"][:57] + "...") if len(row["error"]) > 60 else row["error"]
         print(
-            f"| {row['drug_name']} | {row['dailymed_found']} | "
-            f"{row['json_valid']} | {row['guide_generated']} | "
-            f"{row['seconds']} | {row['error']} |"
+            f"| {row['drug_name']} | {_bool(row['dailymed_found'])} | "
+            f"{_bool(row['json_valid'])} | {_bool(row['guide_generated'])} | "
+            f"{row['seconds']} | {error} |"
         )
 
 
