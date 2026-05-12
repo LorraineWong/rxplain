@@ -1,9 +1,11 @@
 # Rxplain — Your Medication, Made Legible
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Hackathon](https://img.shields.io/badge/Kaggle-Gemma%204%20Good%20Hackathon-orange)](https://www.kaggle.com/competitions/gemma-4-good-hackathon)
-[![Track](https://img.shields.io/badge/Track-Health%20%26%20Sciences-green)]()
-[![Track](https://img.shields.io/badge/Track-Digital%20Equity-blueviolet)]()
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License"/></a>
+  <a href="https://www.kaggle.com/competitions/gemma-4-good-hackathon"><img src="https://img.shields.io/badge/Kaggle-Gemma%204%20Good%20Hackathon-orange" alt="Hackathon"/></a>
+  <img src="https://img.shields.io/badge/Track-Health%20%26%20Sciences-green" alt="Track"/>
+  <img src="https://img.shields.io/badge/Track-Digital%20Equity-blueviolet" alt="Track"/>
+</p>
 
 > Turn any medicine box or drug name into a plain-language, personalized patient guide — powered by Gemma 4 and NIH DailyMed.
 
