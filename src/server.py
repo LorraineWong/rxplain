@@ -23,6 +23,7 @@ from schema import UserProfile
 from vision import image_to_drug_name
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")), name="static")
 
 # Global model references — set by launch()
 _model = None

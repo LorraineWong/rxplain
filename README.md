@@ -1,6 +1,10 @@
 # Rxplain — Your Medication, Made Legible
 
 <p align="center">
+  <img src="src/static/logo.png" alt="Rxplain Logo" width="96"/>
+</p>
+
+<p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License"/></a>
   <a href="https://www.kaggle.com/competitions/gemma-4-good-hackathon"><img src="https://img.shields.io/badge/Kaggle-Gemma%204%20Good%20Hackathon-orange" alt="Hackathon"/></a>
   <img src="https://img.shields.io/badge/Track-Health%20%26%20Sciences-green" alt="Track"/>
