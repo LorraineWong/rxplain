@@ -6,6 +6,7 @@ Replaces Gradio. Serves the HTML frontend and exposes two API endpoints.
 import base64
 import gc
 import json
+import re
 from io import BytesIO
 
 import torch
@@ -73,9 +74,21 @@ def _csv(v: str):
 
 
 def _truncate(text: str, max_chars: int = 120) -> str:
+    text = re.sub(r'\s+', ' ', text).strip()
     if len(text) <= max_chars:
         return text
-    return text[:max_chars].rsplit(" ", 1)[0].rstrip(".,;") + "…"
+
+    before_limit = text[:max_chars]
+    boundaries = [before_limit.rfind("."), before_limit.rfind("!"), before_limit.rfind("?")]
+    boundary = max(boundaries)
+    if boundary != -1:
+        return before_limit[:boundary + 1].strip()
+
+    match = re.search(r'[.!?]', text[max_chars:])
+    if match:
+        return text[:max_chars + match.start() + 1].strip()
+
+    return text
 
 
 def format_guide(drug_info, personal_summary: str) -> str:

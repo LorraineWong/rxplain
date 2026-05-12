@@ -30,6 +30,67 @@ def _load_json_object(raw: str) -> dict:
     raise ValueError("Gemma output did not contain valid JSON.")
 
 
+def _trim_to_complete_sentence(value: str) -> str | None:
+    """Return complete sentence text, or None if no complete sentence remains."""
+    text = re.sub(r'\s+', ' ', value).strip()
+    if not text:
+        return None
+    if text.endswith(("...", "…")):
+        text = text.rstrip(".…").strip()
+    elif text.endswith((".", "!", "?")):
+        return text
+
+    boundaries = [
+        text.rfind(". "),
+        text.rfind("! "),
+        text.rfind("? "),
+        text.rfind("."),
+        text.rfind("!"),
+        text.rfind("?"),
+    ]
+    boundary = max(boundaries)
+    if boundary == -1:
+        return None
+    return text[:boundary + 1].strip() or None
+
+
+def _cleanup_generated_text(data: dict) -> None:
+    """Drop or trim truncated patient-facing text before Pydantic validation."""
+    prose_fields = {"text", "description", "reason", "personal_summary"}
+
+    def clean_item(item):
+        if isinstance(item, str):
+            return _trim_to_complete_sentence(item)
+        if isinstance(item, list):
+            cleaned = []
+            for child in item:
+                fixed = clean_item(child)
+                if fixed is not None:
+                    cleaned.append(fixed)
+            return cleaned
+        if isinstance(item, dict):
+            cleaned = {}
+            for key, value in item.items():
+                if key in prose_fields and isinstance(value, str):
+                    fixed = _trim_to_complete_sentence(value)
+                    if fixed is None:
+                        return None
+                    cleaned[key] = fixed
+                elif key in {"warnings", "side_effects", "food_interactions"} and isinstance(value, list):
+                    cleaned[key] = [fixed for child in value if (fixed := clean_item(child)) is not None]
+                elif key in {"contraindications", "emergency_signs"} and isinstance(value, list):
+                    cleaned[key] = [fixed for child in value if (fixed := clean_item(child)) is not None]
+                else:
+                    cleaned[key] = value
+            return cleaned
+        return item
+
+    cleaned = clean_item(data)
+    if isinstance(cleaned, dict):
+        data.clear()
+        data.update(cleaned)
+
+
 def extract_drug_info_robust(leaflet_text: str, model, processor) -> DrugInfo:
     """
     Extract DrugInfo from leaflet text using local Gemma 4 model.
@@ -112,6 +173,8 @@ JSON OUTPUT:"""
         text = w.get("text", "")
         if text == text.upper() and len(text) > 3:
             w["text"] = text.capitalize()
+
+    _cleanup_generated_text(data)
 
     # Remove duplicate warnings
     seen = set()

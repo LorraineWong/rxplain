@@ -72,11 +72,22 @@ def personalise(drug_info: DrugInfo, profile: UserProfile) -> DrugInfo:
 
 
 def _truncate(text: str, max_chars: int = 100) -> str:
-    """Truncate warning text to max_chars, ending at a word boundary."""
+    """Shorten text without cutting off an incomplete sentence."""
+    text = re.sub(r'\s+', ' ', text).strip()
     if len(text) <= max_chars:
         return text
-    truncated = text[:max_chars].rsplit(" ", 1)[0]
-    return truncated.rstrip(".,;") + "…"
+
+    before_limit = text[:max_chars]
+    boundaries = [before_limit.rfind("."), before_limit.rfind("!"), before_limit.rfind("?")]
+    boundary = max(boundaries)
+    if boundary != -1:
+        return before_limit[:boundary + 1].strip()
+
+    match = re.search(r'[.!?]', text[max_chars:])
+    if match:
+        return text[:max_chars + match.start() + 1].strip()
+
+    return text
 
 
 def _safe_amount(amount: str) -> str:
