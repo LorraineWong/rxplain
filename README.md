@@ -97,15 +97,18 @@ End-to-end smoke test across 10 common medications on Google Colab (L4 GPU):
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1JCgQPB0JUsRntVpPzwljnRXo01ABTuyF?usp=sharing)
 
-```bash
-# In Colab
-git clone https://github.com/LorraineWong/rxplain.git /content/rxplain
-cd /content/rxplain
-pip install -r requirements.txt
-pip install torch transformers accelerate
-```
+> **Requires a GPU runtime.** In Colab: *Runtime → Change runtime type → L4 GPU* (or equivalent).
 
-The Colab notebook includes all setup — Gemma 4 model loading, dependency installation, and UI launch. Open it, run all cells, then expose port 7860 via Colab tunnel to access the web UI.
+The notebook is a self-contained six-cell pipeline — open it and run all cells in order:
+
+| Cell | What it does |
+|---|---|
+| 1 · Environment Check | Verifies GPU availability and Python version |
+| 2 · Install Dependencies | Installs `requirements.txt` and `torch transformers accelerate` |
+| 3 · Load Model | Downloads and loads the Gemma 4 checkpoint (~10 min on first run) |
+| 4 · Load Source Modules | Imports the Rxplain pipeline from `src/` |
+| 5 · Launch | Starts the FastAPI server on port 7860 — open the Colab tunnel URL to use the UI |
+| 6 · Evaluate *(optional)* | Runs `evaluate_drugs()` smoke test across 10 common medications |
 
 ---
 
