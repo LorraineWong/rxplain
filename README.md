@@ -153,7 +153,7 @@ rxplain/
 | Backend | FastAPI + Uvicorn |
 | Frontend | Single-file mobile HTML/CSS/JS |
 | Camera input | `getUserMedia` API (desktop + mobile) |
-| Demo environment | Google Colab (A100 GPU) |
+| Demo environment | Google Colab (L4 GPU) |
 
 ---
 
