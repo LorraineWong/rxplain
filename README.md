@@ -68,7 +68,7 @@ The personalisation step (warning reordering, summary generation) is deliberatel
 
 ## Demo
 
-**[Open in Google Colab →](https://colab.research.google.com/drive/1JCgQPB0JUsRntVpPzwljnRXo01ABTuyF?usp=sharing)**
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1JCgQPB0JUsRntVpPzwljnRXo01ABTuyF?usp=sharing)
 
 ```bash
 # In Colab

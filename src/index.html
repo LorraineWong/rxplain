@@ -616,6 +616,7 @@ function doGenerate() {
     if (data.ok) {
       document.getElementById('output').innerHTML = data.html;
       document.getElementById('new-medicine-btn').style.display = 'block';
+      document.getElementById('output').scrollIntoView({behavior:'smooth', block:'start'});
     } else {
       document.getElementById('output').innerHTML =
         '<div style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:12px;' +
