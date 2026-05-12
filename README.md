@@ -13,6 +13,10 @@
 
 > Turn any medicine box or drug name into a plain-language, personalized patient guide — powered by Gemma 4 and NIH DailyMed.
 
+<p align="center">
+  <img src="src/static/card.png" alt="Rxplain — Scan, Understand, Stay Safe" width="800"/>
+</p>
+
 ---
 
 ## The Problem
