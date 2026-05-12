@@ -225,7 +225,7 @@ JSON OUTPUT:"""
 
     emergency_signs = [s for s in data.get("emergency_signs", []) if isinstance(s, str) and s.strip()]
     if len(emergency_signs) < 3:
-        raise ValueError("Gemma extraction failed: emergency_signs must contain at least 3 specific symptoms.")
+        print(f"[extract] Warning: only {len(emergency_signs)} emergency sign(s) extracted — proceeding with what is available.")
     data["emergency_signs"] = emergency_signs
 
     # Remove duplicate warnings
