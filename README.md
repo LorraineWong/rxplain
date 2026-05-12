@@ -177,15 +177,17 @@ rxplain/
 
 ## Where Rxplain Goes Next
 
-The comprehension gap Rxplain addresses is global. Three directions with the highest potential impact:
+The comprehension gap Rxplain addresses is global. Five directions with the highest potential impact:
 
 **Multilingual output** — Mandarin, Spanish, and Indonesian together cover over 1.5 billion people, many in communities where health literacy gaps are most severe. A patient who can photograph a box but cannot read the guide in their own language is only half-served.
+
+**Hospital discharge integration** — Today, patients leave a clinic with a drug bag and a receipt, often without knowing the generic name of what they've been prescribed. A simple QR code printed on the dispensing label can bridge this gap: scan → Rxplain guide loads pre-filled for that specific medication → patient sets a dosage reminder before leaving the pharmacy. This turns Rxplain from a lookup tool into a standard part of the discharge workflow, reaching patients at exactly the moment they need the information most.
+
+**Medication reminders** — A guide that is read once and forgotten does not change behaviour. The logical extension of the health profile already collected is a lightweight reminder system: morning and evening push notifications tied to the dosage timeline already generated. The data is already there — it just needs a scheduler.
 
 **Multi-drug interaction checks** — The patients who need Rxplain most — older adults managing chronic conditions — are also the most likely to be on multiple medications. Surfacing interactions across a user's full medication list is the natural next step for the health profile already collected.
 
 **Offline label cache** — Digital equity means reaching users in low-bandwidth environments. Pre-caching common drug labels removes the DailyMed API dependency and makes Rxplain viable in rural clinics and underserved communities.
-
-**Hospital discharge integration** — Today, patients leave a clinic with a drug bag and a receipt, often without knowing the generic name of what they've been prescribed. A simple QR code printed on the dispensing label can bridge this gap: scan → Rxplain guide loads pre-filled for that specific medication → patient sets a dosage reminder before leaving the pharmacy. This turns Rxplain from a lookup tool into a standard part of the discharge workflow, reaching patients at exactly the moment they need the information most.
 
 ---
 
