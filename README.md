@@ -169,6 +169,12 @@ rxplain/
 
 ---
 
+## Where Rxplain Goes Next
+
+Rxplain is designed to grow with its users. The most impactful near-term directions are multilingual output — starting with Mandarin, Malay, and Spanish to serve communities most affected by the health literacy gap — followed by multi-drug interaction checks for patients managing complex regimens, and an offline label cache for low-connectivity settings.
+
+---
+
 ## Author & License
 
 **Lorraine Wong** · Apache 2.0
