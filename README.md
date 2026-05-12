@@ -189,8 +189,8 @@ The comprehension gap Rxplain addresses is global. Three directions with the hig
 
 ## Author & License
 
-**Lorraine Wong** — [github.com/LorraineWong](https://github.com/LorraineWong)
+Rxplain was built by **[Lorraine Wong](https://github.com/LorraineWong)** as a submission for the [Gemma 4 Good Hackathon 2026](https://www.kaggle.com/competitions/gemma-4-good-hackathon).
 
-Released under the [Apache 2.0 License](LICENSE) — free to use, modify, and deploy, including for institutional and commercial purposes.
+The project is released under the [Apache 2.0 License](LICENSE) and is free to use, modify, and deploy — including for institutional, clinical, and commercial purposes.
 
-*Rxplain is a hackathon prototype, not a certified medical device. Always consult a qualified pharmacist or physician before making medication decisions.*
+> **Medical Disclaimer:** Rxplain is a prototype, not a certified medical device. All content is sourced from official NIH DailyMed labels and presented for informational purposes only. Always consult a qualified pharmacist or physician before making medication decisions.
