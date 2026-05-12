@@ -54,13 +54,24 @@ def _trim_to_complete_sentence(value: str) -> str | None:
     return text[:boundary + 1].strip() or None
 
 
+def _clean_short_phrase(value: str) -> str | None:
+    """Keep short clinical phrases unless they are visibly truncated."""
+    text = re.sub(r'\s+', ' ', value).strip()
+    if not text:
+        return None
+    if text.endswith(("...", "…")):
+        return _trim_to_complete_sentence(text)
+    return text
+
+
 def _cleanup_generated_text(data: dict) -> None:
     """Drop or trim truncated patient-facing text before Pydantic validation."""
     prose_fields = {"text", "description", "reason", "personal_summary"}
+    phrase_list_fields = {"contraindications", "emergency_signs"}
 
     def clean_item(item):
         if isinstance(item, str):
-            return _trim_to_complete_sentence(item)
+            return _clean_short_phrase(item)
         if isinstance(item, list):
             cleaned = []
             for child in item:
@@ -78,8 +89,11 @@ def _cleanup_generated_text(data: dict) -> None:
                     cleaned[key] = fixed
                 elif key in {"warnings", "side_effects", "food_interactions"} and isinstance(value, list):
                     cleaned[key] = [fixed for child in value if (fixed := clean_item(child)) is not None]
-                elif key in {"contraindications", "emergency_signs"} and isinstance(value, list):
-                    cleaned[key] = [fixed for child in value if (fixed := clean_item(child)) is not None]
+                elif key in phrase_list_fields and isinstance(value, list):
+                    cleaned[key] = [
+                        fixed for child in value
+                        if isinstance(child, str) and (fixed := _clean_short_phrase(child)) is not None
+                    ]
                 else:
                     cleaned[key] = value
             return cleaned
