@@ -81,7 +81,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .upload-area:hover,.upload-area.dragover{border-color:#00A878;background:#ECFDF5;}
 .upload-area.has-image{border-style:solid;border-color:#00A878;}
 .upload-preview{max-width:100%;max-height:180px;border-radius:8px;
-                object-fit:contain;display:none;}
+                object-fit:contain;display:none;margin:0 auto;}
 .upload-placeholder{color:#6B7280;font-size:13px;}
 .upload-icon{font-size:28px;margin-bottom:6px;}
 
@@ -166,52 +166,69 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       <div class="step-sub">Used only for this guide. Not stored or saved.</div>
     </div>
   </div>
-  <div class="card">
-    <div class="field-label">Age Group</div>
-    <div class="pill-group" id="age-group">
-      <button class="pill" onclick="setAge('child')">Child &lt;18</button>
-      <button class="pill active" onclick="setAge('adult')">Adult 18–64</button>
-      <button class="pill" onclick="setAge('elderly')">Elderly 65+</button>
-    </div>
-    <div class="field-label">Sex</div>
-    <div class="pill-group" id="sex-group">
-      <button class="pill" onclick="setSex('male')">Male</button>
-      <button class="pill" onclick="setSex('female')">Female</button>
-      <button class="pill active" onclick="setSex('prefer_not_to_say')">Not specified</button>
+  <div id="profile-summary" style="display:none;" class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#00A878;text-transform:uppercase;
+                    letter-spacing:0.06em;margin-bottom:6px;">✓ Saved</div>
+        <div id="profile-summary-text" style="font-size:13px;color:#1A202C;line-height:1.7;"></div>
+      </div>
+      <button onclick="editProfile()" style="font-size:12px;color:#00A878;font-weight:600;
+        border:none;background:none;cursor:pointer;padding:0;white-space:nowrap;
+        margin-left:12px;flex-shrink:0;">Edit</button>
     </div>
   </div>
-  <div class="card">
-    <div class="field-label" style="margin-bottom:2px;">Medical Conditions</div>
-    <div style="font-size:11px;color:#9CA3AF;margin-bottom:10px;">Select all that apply</div>
-    <div class="cond-grid">
-      <button class="cond-btn hidden" id="btn-pregnant"
-        onclick="toggleCond(this,'pregnant')">🤰 Pregnant</button>
-      <button class="cond-btn hidden" id="btn-breastfeeding"
-        onclick="toggleCond(this,'breastfeeding')">🍼 Breastfeeding</button>
-      <button class="cond-btn"
-        onclick="toggleCond(this,'heart_condition')">❤️ Heart disease</button>
-      <button class="cond-btn"
-        onclick="toggleCond(this,'diabetes')">🩸 Diabetes</button>
-      <button class="cond-btn"
-        onclick="toggleCond(this,'hypertension')">🩺 Hypertension</button>
-      <button class="cond-btn"
-        onclick="toggleCond(this,'asthma')">🫁 Asthma</button>
-      <button class="cond-btn"
-        onclick="toggleCond(this,'kidney_issue')">🫘 Kidney disease</button>
-      <button class="cond-btn"
-        onclick="toggleCond(this,'liver_issue')">🟡 Liver disease</button>
+  <div id="profile-cards">
+    <div class="card">
+      <div class="field-label">Age Group</div>
+      <div class="pill-group" id="age-group">
+        <button class="pill" onclick="setAge('child')">Child &lt;18</button>
+        <button class="pill active" onclick="setAge('adult')">Adult 18–64</button>
+        <button class="pill" onclick="setAge('elderly')">Elderly 65+</button>
+      </div>
+      <div class="field-label">Sex</div>
+      <div class="pill-group" id="sex-group">
+        <button class="pill" onclick="setSex('male')">Male</button>
+        <button class="pill" onclick="setSex('female')">Female</button>
+        <button class="pill active" onclick="setSex('prefer_not_to_say')">Not specified</button>
+      </div>
     </div>
-    <div class="field-label" style="margin-top:12px;">Other Conditions</div>
-    <input class="field-input" id="other-conditions" type="text"
-      placeholder="e.g. G6PD deficiency, thyroid disorder"
-      style="margin-bottom:10px;" oninput="sync()"/>
-    <div class="field-label">Known Allergies</div>
-    <input class="field-input" id="allergies" type="text"
-      placeholder="e.g. penicillin, sulfa, aspirin"
-      style="margin-bottom:10px;" oninput="sync()"/>
-    <div class="field-label">Current Medications</div>
-    <input class="field-input" id="other-medications" type="text"
-      placeholder="e.g. aspirin, metformin, lisinopril" oninput="sync()"/>
+    <div class="card">
+      <div class="field-label" style="margin-bottom:2px;">Medical Conditions</div>
+      <div style="font-size:11px;color:#9CA3AF;margin-bottom:10px;">Select all that apply</div>
+      <div class="cond-grid">
+        <button class="cond-btn hidden" id="btn-pregnant"
+          onclick="toggleCond(this,'pregnant')">🤰 Pregnant</button>
+        <button class="cond-btn hidden" id="btn-breastfeeding"
+          onclick="toggleCond(this,'breastfeeding')">🍼 Breastfeeding</button>
+        <button class="cond-btn"
+          onclick="toggleCond(this,'heart_condition')">❤️ Heart disease</button>
+        <button class="cond-btn"
+          onclick="toggleCond(this,'diabetes')">🩸 Diabetes</button>
+        <button class="cond-btn"
+          onclick="toggleCond(this,'hypertension')">🩺 Hypertension</button>
+        <button class="cond-btn"
+          onclick="toggleCond(this,'asthma')">🫁 Asthma</button>
+        <button class="cond-btn"
+          onclick="toggleCond(this,'kidney_issue')">🫘 Kidney disease</button>
+        <button class="cond-btn"
+          onclick="toggleCond(this,'liver_issue')">🟡 Liver disease</button>
+      </div>
+      <div class="field-label" style="margin-top:12px;">Other Conditions</div>
+      <input class="field-input" id="other-conditions" type="text"
+        placeholder="e.g. G6PD deficiency, thyroid disorder"
+        style="margin-bottom:10px;" oninput="sync()"/>
+      <div class="field-label">Known Allergies</div>
+      <input class="field-input" id="allergies" type="text"
+        placeholder="e.g. penicillin, sulfa, aspirin"
+        style="margin-bottom:10px;" oninput="sync()"/>
+      <div class="field-label">Current Medications</div>
+      <input class="field-input" id="other-medications" type="text"
+        placeholder="e.g. aspirin, metformin, lisinopril" oninput="sync()"/>
+      <button onclick="saveProfile()" style="width:100%;padding:10px;border-radius:999px;
+        border:none;background:#00A878;color:#fff;font-size:13px;font-weight:700;
+        cursor:pointer;margin-top:14px;">✓ Save Profile</button>
+    </div>
   </div>
 
   <!-- Step 2: Medication -->
@@ -309,8 +326,36 @@ var state = {
 function setAge(v) {
   state.age_group = v;
   document.querySelectorAll('#age-group .pill').forEach(function(b) {
-    b.classList.toggle('active', b.textContent.trim().toLowerCase() === v);
+    b.classList.toggle('active', b.textContent.trim().toLowerCase().startsWith(v));
   });
+}
+
+function saveProfile() {
+  sync();
+  var ageLabel = {child:'Child <18', adult:'Adult 18–64', elderly:'Elderly 65+'};
+  var sexLabel = {male:'Male', female:'Female', prefer_not_to_say:'Not specified'};
+  var lines = [ageLabel[state.age_group] + ' · ' + sexLabel[state.sex]];
+  var conds = [];
+  if (state.pregnant) conds.push('Pregnant');
+  if (state.breastfeeding) conds.push('Breastfeeding');
+  if (state.heart_condition) conds.push('Heart disease');
+  if (state.diabetes) conds.push('Diabetes');
+  if (state.hypertension) conds.push('Hypertension');
+  if (state.asthma) conds.push('Asthma');
+  if (state.kidney_issue) conds.push('Kidney disease');
+  if (state.liver_issue) conds.push('Liver disease');
+  if (state.other_conditions) conds.push(state.other_conditions);
+  if (conds.length) lines.push(conds.join(', '));
+  if (state.allergies) lines.push('Allergies: ' + state.allergies);
+  if (state.other_medications) lines.push('Medications: ' + state.other_medications);
+  document.getElementById('profile-summary-text').innerHTML = lines.join('<br>');
+  document.getElementById('profile-cards').style.display = 'none';
+  document.getElementById('profile-summary').style.display = 'block';
+}
+
+function editProfile() {
+  document.getElementById('profile-summary').style.display = 'none';
+  document.getElementById('profile-cards').style.display = '';
 }
 
 function setSex(v) {
@@ -484,6 +529,20 @@ function doScan() {
   });
 }
 
+// ── UI lock ───────────────────────────────────────────────────────────────────
+function setFormDisabled(lock) {
+  document.querySelectorAll('.pill, .cond-btn, .field-input, #scan-btn, #clear-image-btn').forEach(function(el) {
+    el.disabled = lock;
+    el.style.pointerEvents = lock ? 'none' : '';
+    el.style.opacity = lock ? '0.5' : '';
+  });
+  var area = document.getElementById('upload-area');
+  area.style.pointerEvents = lock ? 'none' : '';
+  area.style.opacity = lock ? '0.5' : '';
+  var saveBtn = document.querySelector('[onclick="saveProfile()"]');
+  if (saveBtn) { saveBtn.disabled = lock; saveBtn.style.opacity = lock ? '0.5' : ''; }
+}
+
 // ── Generate ──────────────────────────────────────────────────────────────────
 function doGenerate() {
   sync();
@@ -497,6 +556,7 @@ function doGenerate() {
   var btn = document.getElementById('gen-btn');
   btn.disabled = true;
   btn.textContent = '⏳ Generating…';
+  setFormDisabled(true);
   document.getElementById('output').innerHTML =
     '<div class="output-loading">' +
     '<div class="spinner"></div>' +
@@ -528,6 +588,7 @@ function doGenerate() {
   .then(function(data) {
     btn.disabled = false;
     btn.textContent = 'Generate Guide →';
+    setFormDisabled(false);
     if (data.ok) {
       document.getElementById('output').innerHTML = data.html;
     } else {
@@ -539,6 +600,7 @@ function doGenerate() {
   .catch(function(err) {
     btn.disabled = false;
     btn.textContent = 'Generate Guide →';
+    setFormDisabled(false);
     document.getElementById('output').innerHTML =
       '<div style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:12px;' +
       'padding:12px 14px;font-size:13px;color:#991B1B;">❌ Error: ' + err.message + '</div>';
