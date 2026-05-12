@@ -185,6 +185,8 @@ The comprehension gap Rxplain addresses is global. Three directions with the hig
 
 **Offline label cache** — Digital equity means reaching users in low-bandwidth environments. Pre-caching common drug labels removes the DailyMed API dependency and makes Rxplain viable in rural clinics and underserved communities.
 
+**Hospital discharge integration** — Today, patients leave a clinic with a drug bag and a receipt, often without knowing the generic name of what they've been prescribed. A simple QR code printed on the dispensing label can bridge this gap: scan → Rxplain guide loads pre-filled for that specific medication → patient sets a dosage reminder before leaving the pharmacy. This turns Rxplain from a lookup tool into a standard part of the discharge workflow, reaching patients at exactly the moment they need the information most.
+
 ---
 
 ## Author & License
