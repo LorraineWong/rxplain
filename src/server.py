@@ -1,5 +1,5 @@
 """
-server.py — FastAPI backend for Legimed.
+server.py — FastAPI backend for Rxplain.
 Replaces Gradio. Serves the HTML frontend and exposes two API endpoints.
 """
 

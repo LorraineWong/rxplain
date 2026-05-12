@@ -1,4 +1,4 @@
-# Legimed — Your Medication, Made Legible
+# Rxplain — Your Medication, Made Legible
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Hackathon](https://img.shields.io/badge/Kaggle-Gemma%204%20Good%20Hackathon-orange)](https://www.kaggle.com/competitions/gemma-4-good-hackathon)
@@ -17,7 +17,7 @@ This is not an information gap. It is a comprehension gap. And it disproportiona
 
 ---
 
-## What Legimed Does
+## What Rxplain Does
 
 1. User fills in a temporary health profile (age, sex, conditions, allergies, current medications)
 2. User photographs a medicine box with their camera, or types a drug name
@@ -37,7 +37,7 @@ This is not an information gap. It is a comprehension gap. And it disproportiona
 
 ## Gemma 4 in Action
 
-Legimed uses Gemma 4 for two distinct tasks:
+Rxplain uses Gemma 4 for two distinct tasks:
 
 ### 1. Vision — Medicine Box Recognition (`src/vision.py`)
 
@@ -72,15 +72,15 @@ The personalisation step (warning reordering, summary generation) is deliberatel
 
 ```bash
 # In Colab
-git clone https://github.com/LorraineWong/legimed.git /content/legimed
-cd /content/legimed
+git clone https://github.com/LorraineWong/rxplain.git /content/rxplain
+cd /content/rxplain
 pip install -r requirements.txt
 pip install torch transformers accelerate
 ```
 
 ```python
 import sys
-sys.path.insert(0, "/content/legimed/src")
+sys.path.insert(0, "/content/rxplain/src")
 
 # Load your Gemma 4 checkpoint
 model = ...
@@ -95,7 +95,7 @@ launch(model, processor, port=7860)
 
 ## Hackathon Track Fit
 
-| Track | How Legimed qualifies |
+| Track | How Rxplain qualifies |
 |---|---|
 | **Health & Sciences** | Democratises official drug-label knowledge for patients and caregivers who cannot interpret clinical text |
 | **Digital Equity & Inclusivity** | Targets users with low health literacy, older adults, non-native speakers, and those without easy clinician access |
@@ -106,7 +106,7 @@ launch(model, processor, port=7860)
 ## Project Structure
 
 ```
-legimed/
+rxplain/
 ├── src/
 │   ├── server.py       # FastAPI backend + HTML guide renderer
 │   ├── index.html      # Mobile-first single-file frontend
@@ -170,4 +170,4 @@ legimed/
 
 **Lorraine Wong** · Apache 2.0
 
-*Legimed is a hackathon prototype, not a certified medical device.*
+*Rxplain is a hackathon prototype, not a certified medical device.*

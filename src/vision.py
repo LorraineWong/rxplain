@@ -1,4 +1,4 @@
-# vision.py - Image input pipeline for Legimed, powered by Gemma 4 local inference
+# vision.py - Image input pipeline for Rxplain, powered by Gemma 4 local inference
 
 import re
 from PIL import Image

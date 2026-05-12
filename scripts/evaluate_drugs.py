@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Small evaluation helper for the Legimed Colab demo.
+"""Small evaluation helper for the Rxplain Colab demo.
 
 Usage from a notebook after loading Gemma:
 
     import sys
-    sys.path.insert(0, "/content/legimed")
+    sys.path.insert(0, "/content/rxplain")
     from scripts.evaluate_drugs import evaluate_drugs
     results = evaluate_drugs(model, processor)
 
