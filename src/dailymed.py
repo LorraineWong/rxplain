@@ -3,15 +3,45 @@ import re
 
 
 def search_drug(drug_name: str) -> dict:
-    """Search DailyMed for a drug by name, return first result."""
+    """Search DailyMed for a drug by name, return the best matching result."""
     url = "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json"
-    params = {"drug_name": drug_name, "pagesize": 1}
+    params = {"drug_name": drug_name, "pagesize": 10}
     response = requests.get(url, params=params, timeout=15)
     response.raise_for_status()
     data = response.json()
-    if not data.get("data"):
+    results = data.get("data") or []
+    if not results:
         return None
-    return data["data"][0]
+
+    query = re.sub(r'[^a-z0-9]+', ' ', drug_name.lower()).strip()
+    query_tokens = [t for t in query.split() if t]
+
+    def score_result(item: dict) -> int:
+        title = str(item.get("title", "")).lower()
+        title_clean = re.sub(r'\[[^\]]+\]', ' ', title)
+        title_clean = re.sub(r'[^a-z0-9]+', ' ', title_clean).strip()
+        title_tokens = set(title_clean.split())
+        score = 0
+
+        if query and query == title_clean:
+            score += 100
+        if query and query in title_clean:
+            score += 40
+        if query_tokens and all(token in title_tokens for token in query_tokens):
+            score += 30
+        if query_tokens and title_clean.startswith(query_tokens[0]):
+            score += 15
+
+        repackager_markers = ["repack", "repackager", "packager"]
+        if any(marker in title for marker in repackager_markers):
+            score -= 20
+
+        if "table" in title_clean or "tablet" in title_clean or "capsule" in title_clean or "oral" in title_clean:
+            score += 5
+
+        return score
+
+    return max(results, key=score_result)
 
 
 def fetch_leaflet_text(set_id: str) -> str:

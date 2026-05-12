@@ -105,6 +105,34 @@ def _cleanup_generated_text(data: dict) -> None:
         data.update(cleaned)
 
 
+def _normalize_text(value: str) -> str:
+    """Normalize text for lightweight leaflet matching."""
+    value = value.lower()
+    value = re.sub(r'[^a-z0-9]+', ' ', value)
+    return re.sub(r'\s+', ' ', value).strip()
+
+
+def _food_interaction_is_explicit(item: dict, leaflet_text: str) -> bool:
+    """Keep only food interactions that are explicitly supported by the leaflet."""
+    substance = _normalize_text(str(item.get("substance", "")))
+    reason = _normalize_text(str(item.get("reason", "")))
+    leaflet = _normalize_text(leaflet_text)
+
+    if not substance:
+        return False
+    if substance in leaflet:
+        return True
+
+    tokens = [token for token in substance.split() if len(token) > 2]
+    if tokens and all(token in leaflet for token in tokens):
+        return True
+
+    if reason and reason in leaflet:
+        return True
+
+    return False
+
+
 def extract_drug_info_robust(leaflet_text: str, model, processor) -> DrugInfo:
     """
     Extract DrugInfo from leaflet text using local Gemma 4 model.
@@ -121,14 +149,13 @@ STRICT OUTPUT RULES:
 - side_effects severity MUST be exactly one of: HIGH, MEDIUM, LOW
 - time_of_day MUST be exactly one of: morning, afternoon, evening, bedtime
 - amount MUST be a clean dosage string like "5 mg", "1 tablet", "2-10 mg".
-- drug_class MUST be the most specific pharmacologic class supported by the label, such as "Vitamin K antagonist" instead of only "Anticoagulant" for warfarin.
+- drug_class MUST be the most specific pharmacologic class supported by the label.
 - Extract AT LEAST 3 side_effects with different severity levels:
   - At least one HIGH severity effect that can be life-threatening.
   - At least one MEDIUM severity effect that requires calling a doctor.
   - At least one LOW severity effect that can usually be monitored at home.
 - Each side_effect description MUST describe what the patient may notice or experience, such as "You may notice unusual bruising or bleeding that does not stop"; do not write vague phrases like "may cause bleeding complications".
-- Extract AT LEAST 3 food_interactions with actual foods or drinks only. Do NOT include drugs, medications, supplements, or medication classes.
-- For warfarin-class anticoagulants, include clinically relevant food or drink examples when supported by the leaflet: green leafy vegetables such as spinach, kale, or broccoli; grapefruit; and alcohol. The action must reflect clinical guidance.
+- Extract AT LEAST 3 food_interactions with actual foods or drinks only, and include only interactions that are explicitly mentioned in the provided leaflet text. Do NOT include drugs, medications, supplements, or medication classes. Do not invent or assume interactions based on drug class.
 - warning text MUST be plain English for a patient with no medical background, written as complete readable sentences, with at least 2 sentences per warning. Do not use ALL CAPS.
 - Extract AT LEAST 3 warnings as complete patient-facing warnings.
 - emergency_signs MUST contain AT LEAST 3 real medical emergencies, written as specific observable symptoms a patient can recognise at home, such as "Coughing or vomiting blood", "Black or tarry stools", "Sudden severe headache", or "Unexplained bruising". Do not use generic phrases like "signs and symptoms of bleeding".
@@ -171,6 +198,11 @@ JSON OUTPUT:"""
                 fi["action"] = "caution"
             else:
                 fi["action"] = "ok"
+
+    data["food_interactions"] = [
+        fi for fi in data.get("food_interactions", [])
+        if isinstance(fi, dict) and _food_interaction_is_explicit(fi, leaflet_text)
+    ]
 
     # Auto-correct side_effects severity
     for se in data.get("side_effects", []):
