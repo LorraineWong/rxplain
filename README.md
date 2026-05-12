@@ -171,7 +171,13 @@ rxplain/
 
 ## Where Rxplain Goes Next
 
-Rxplain is designed to grow with its users. The most impactful near-term directions are multilingual output — starting with Mandarin, Spanish, and Indonesian to serve communities most affected by the health literacy gap — followed by multi-drug interaction checks for patients managing complex regimens, and an offline label cache for low-connectivity settings.
+The comprehension gap Rxplain addresses is global. Three directions with the highest potential impact:
+
+**Multilingual output** — Mandarin, Spanish, and Indonesian together cover over 1.5 billion people, many in communities where health literacy gaps are most severe. A patient who can photograph a box but cannot read the guide in their own language is only half-served.
+
+**Multi-drug interaction checks** — The patients who need Rxplain most — older adults managing chronic conditions — are also the most likely to be on multiple medications. Surfacing interactions across a user's full medication list is the natural next step for the health profile already collected.
+
+**Offline label cache** — Digital equity means reaching users in low-bandwidth environments. Pre-caching common drug labels removes the DailyMed API dependency and makes Rxplain viable in rural clinics and underserved communities.
 
 ---
 
