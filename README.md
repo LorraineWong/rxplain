@@ -53,7 +53,10 @@ This is intentionally not a general medical chatbot. It is a constrained, ground
 ## How It Works
 
 ```text
-User uploads medicine photo or types medicine name
+User fills in a temporary health profile (age, sex, conditions, allergies, medications)
+        |
+        v
+User takes a photo with device camera or uploads an image, or types a medicine name
         |
         v
 Gemma 4 vision extracts medicine name from image
@@ -243,11 +246,13 @@ It runs common drug names through DailyMed retrieval, Gemma JSON extraction, Pyd
 ## Roadmap
 
 - [x] Drug name input
-- [x] Medicine-box image input
+- [x] Medicine-box image input (upload or live camera via `getUserMedia`)
 - [x] DailyMed label retrieval
 - [x] Gemma-based structured extraction
 - [x] Profile-aware warning prioritization
 - [x] Mobile-first visual guide
+- [x] Temporary health profile with save/collapse UX
+- [x] UI lock during guide generation to prevent mid-flight data changes
 - [ ] Stronger DailyMed result selection and formulation confirmation
 - [ ] More robust JSON repair and extraction diagnostics
 - [ ] Multilingual output for Mandarin, Malay, and Spanish
