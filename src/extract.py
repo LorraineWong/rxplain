@@ -76,7 +76,7 @@ JSON OUTPUT:"""
     ).to(model.device)
 
     with torch.inference_mode():
-        output = model.generate(**inputs, max_new_tokens=2048, do_sample=False)
+        output = model.generate(**inputs, max_new_tokens=3072, do_sample=False)
 
     # Decode only the newly generated tokens
     input_len = inputs["input_ids"].shape[-1]
