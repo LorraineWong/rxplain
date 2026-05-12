@@ -72,6 +72,27 @@ The personalisation step (warning reordering, summary generation) is deliberatel
 
 ---
 
+## Evaluation Results
+
+End-to-end smoke test across 10 common medications on Google Colab (L4 GPU):
+
+| Drug | DailyMed | JSON valid | Guide | Seconds |
+|---|:---:|:---:|:---:|---:|
+| warfarin | ✅ | ✅ | ✅ | 60.2 |
+| metformin | ✅ | ✅ | ✅ | 75.2 |
+| ibuprofen | ✅ | ✅ | ✅ | 69.9 |
+| amoxicillin | ✅ | ✅ | ✅ | 74.2 |
+| atorvastatin | ✅ | ✅ | ✅ | 88.5 |
+| lisinopril | ✅ | ✅ | ✅ | 80.4 |
+| omeprazole | ✅ | ✅ | ✅ | 60.8 |
+| albuterol | ✅ | ✅ | ✅ | 62.9 |
+| levothyroxine | ✅ | ✅ | ✅ | 64.3 |
+| acetaminophen | ✅ | ✅ | ✅ | 68.3 |
+
+**10 / 10 guides generated successfully** — avg 70 s per guide on L4 GPU. Each passed DailyMed retrieval, Pydantic schema validation, and full HTML render. Reproducible via `scripts/evaluate_drugs.py`.
+
+---
+
 ## Demo
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1JCgQPB0JUsRntVpPzwljnRXo01ABTuyF?usp=sharing)
@@ -154,21 +175,6 @@ rxplain/
 | Frontend | Single-file mobile HTML/CSS/JS |
 | Camera input | `getUserMedia` API (desktop + mobile) |
 | Demo environment | Google Colab (L4 GPU) |
-
----
-
-## Roadmap
-
-- [x] Drug name input + medicine-box camera capture
-- [x] NIH DailyMed label retrieval
-- [x] Gemma 4 structured extraction (vision + text)
-- [x] Profile-aware warning prioritisation (conditions, allergies, medications)
-- [x] Mobile-first patient guide UI
-- [x] Temporary health profile with save/collapse UX
-- [ ] Multilingual output (Mandarin, Malay, Spanish)
-- [ ] Source citations linking each warning to its label section
-- [ ] Multi-drug interaction checks
-- [ ] Offline label cache for low-connectivity settings
 
 ---
 
