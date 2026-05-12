@@ -6,6 +6,30 @@ import torch
 from schema import DrugInfo
 
 
+def _load_json_object(raw: str) -> dict:
+    """Load a JSON object from model output, tolerating small wrapper text."""
+    cleaned = raw.strip()
+    cleaned = re.sub(r'^```json\s*', '', cleaned)
+    cleaned = re.sub(r'^```\s*', '', cleaned)
+    cleaned = re.sub(r'\s*```$', '', cleaned).strip()
+
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError:
+        pass
+
+    decoder = json.JSONDecoder()
+    for match in re.finditer(r'\{', cleaned):
+        try:
+            data, _ = decoder.raw_decode(cleaned[match.start():])
+            if isinstance(data, dict):
+                return data
+        except json.JSONDecodeError:
+            continue
+
+    raise ValueError("Gemma output did not contain valid JSON.")
+
+
 def extract_drug_info_robust(leaflet_text: str, model, processor) -> DrugInfo:
     """
     Extract DrugInfo from leaflet text using local Gemma 4 model.
@@ -52,13 +76,7 @@ JSON OUTPUT:"""
     input_len = inputs["input_ids"].shape[-1]
     raw = processor.decode(output[0][input_len:], skip_special_tokens=True).strip()
 
-    # Strip markdown code fences if present
-    raw = re.sub(r'^```json\s*', '', raw)
-    raw = re.sub(r'^```\s*', '', raw)
-    raw = re.sub(r'\s*```$', '', raw)
-    raw = raw.strip()
-
-    data = json.loads(raw)
+    data = _load_json_object(raw)
 
     # Auto-correct food_interactions action
     valid_actions = ["avoid", "caution", "ok"]

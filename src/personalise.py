@@ -92,24 +92,24 @@ def _safe_amount(amount: str) -> str:
 def generate_personal_summary(drug_info: DrugInfo, profile: UserProfile) -> str:
     """
     2-sentence personalised summary. No AI call — deterministic.
-    Sentence 1: dosage. Sentence 2: key risk for this profile.
+    Sentence 1: safe dosage framing. Sentence 2: key risk for this profile.
     """
     lines = []
 
-    # Sentence 1: dosage
+    # Sentence 1: dosage safety framing
     if drug_info.dosage_instructions:
         d = drug_info.dosage_instructions[0]
         amount = _safe_amount(d.amount)
         food_str = "with food" if d.with_food else "without food"
         if amount:
             lines.append(
-                f"Take {amount} of {drug_info.drug_name} every {d.time_of_day}, "
-                f"{food_str}, at the same time each day."
+                f"Follow your prescription label for {drug_info.drug_name}; "
+                f"the official label mentions {amount} around {d.time_of_day}, {food_str}."
             )
         else:
             lines.append(
-                f"Take {drug_info.drug_name} every {d.time_of_day}, "
-                f"{food_str}, at the same time each day."
+                f"Follow your prescription label for {drug_info.drug_name}; "
+                f"the official label includes guidance around {d.time_of_day}, {food_str}."
             )
 
     # Sentence 2: top risk for this profile

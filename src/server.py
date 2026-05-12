@@ -8,6 +8,7 @@ import gc
 import json
 from io import BytesIO
 
+import torch
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -236,7 +237,7 @@ async def scan(req: ScanRequest):
         from PIL import Image
         img_bytes = base64.b64decode(req.image_b64)
         pil_image = Image.open(BytesIO(img_bytes)).convert("RGB")
-        drug_name, method = image_to_drug_name(pil_image, _model, _tokenizer, _processor)
+        drug_name, method = image_to_drug_name(pil_image, model=_model, processor=_processor)
         if drug_name:
             return {"ok": True, "drug_name": drug_name, "method": method}
         return {"ok": False, "drug_name": "", "method": method}
@@ -251,6 +252,8 @@ async def generate(req: GenerateRequest):
         name = req.drug_name.strip()
         if not name:
             return JSONResponse(status_code=400, content={"ok": False, "error": "No drug name provided."})
+        if _model is None or _processor is None:
+            return JSONResponse(status_code=503, content={"ok": False, "error": "Model not loaded."})
 
         leaflet = get_drug_leaflet(name)
         if not leaflet:
@@ -279,7 +282,8 @@ async def generate(req: GenerateRequest):
         guide_html = format_guide(drug_info, summary)
 
         gc.collect()
-        torch.cuda.empty_cache()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
         return {"ok": True, "html": guide_html}
     except Exception as exc:

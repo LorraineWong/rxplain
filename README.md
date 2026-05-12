@@ -1,219 +1,268 @@
-# Legimed — Your Medication, Made Legible
+# Legimed - Your Medication, Made Legible
 
-> Turn any medication name into a personalized visual guide —
-> powered by Gemma 4, fully offline, multilingual, and free.
+Legimed turns a medication name or medicine-box photo into a clear, personalized patient guide using Gemma 4 local inference and official NIH DailyMed drug labels.
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Hackathon](https://img.shields.io/badge/Kaggle-Gemma%204%20Good%20Hackathon-orange)](https://www.kaggle.com/competitions/gemma-4-good-hackathon)
 [![Track](https://img.shields.io/badge/Track-Health%20%26%20Sciences-green)]()
-[![Track](https://img.shields.io/badge/Track-Impact-purple)]()
+[![Focus](https://img.shields.io/badge/Focus-Digital%20Equity%20%2B%20Safety-blueviolet)]()
 
----
+## Summary
 
-## The Problem
+Medication labels and leaflets are dense, small, and difficult to act on. Patients often know when to take a pill, but not what side effects matter, what food or drink to avoid, or which warnings apply to their own health profile.
 
-Medication leaflets average 5,000 words at 8pt font in dense medical jargon.
+Legimed is a prototype for the Kaggle Gemma 4 Good Hackathon. It uses Gemma 4 as a local multimodal and structured-extraction model to convert official medication label text into a mobile-friendly guide.
 
-| Population | Scale | Problem |
-|---|---|---|
-| Adults with low literacy | 760 million globally | Cannot read the text |
-| People with vision impairment | 2.2 billion globally | Cannot see 8pt font |
-| Elderly patients (65+) | 1 in 3 on 5+ medications | Cannot reconcile multiple leaflets |
-| Non-native speakers | Hundreds of millions | Wrong language |
+The output is designed for patients and caregivers:
 
-**WHO estimates medication errors cause 125,000 preventable deaths per year.**
+- A plain-English summary for the user's health profile
+- A morning / afternoon / evening / bedtime dosage timeline
+- Side effects grouped by severity and action
+- Food and drink interaction chips
+- Personalized warnings elevated for pregnancy, age, kidney/liver issues, heart disease, diabetes, asthma, hypertension, allergies, and other medications
+- Emergency signs that should trigger urgent medical help
 
-Drug bag labels tell you *when* and *how much* to take. They do not tell you about side effects, food interactions, emergency signs, or what specifically matters for *your* health profile. Legimed fills that gap.
+Legimed is not a diagnostic or prescribing system. It is an accessibility layer over official drug-label information and should always be checked against a clinician's advice and the user's prescription label.
 
----
+## Hackathon Fit
 
-## The Solution
+Gemma 4 Good emphasizes useful AI for real-world constraints: local intelligence, multimodal understanding, edge deployment, privacy, safety, and social impact. Legimed targets these directly.
 
-Legimed uses **Gemma 4** to automatically convert any medication name into a personalized visual guide — tailored to the individual patient's health profile.
-
-**Step 1** — Enter a drug name (e.g. "warfarin", "metformin")
-**Step 2** — Select your health profile (age, conditions, other medications)
-**Step 3** — Receive a personalized medication guide instantly
-
-The guide contains:
-- **Personal summary** — 3 plain-English sentences written specifically for your profile
-- **Dosage timeline** — morning / afternoon / evening / bedtime visual grid
-- **Side effects** — red / amber / green severity tiers with clear actions
-- **Food & drink** — avoid / caution / ok chips
-- **Personalised warnings** — elevated based on your specific risk profile
-- **Emergency signs** — when to seek help immediately
-
----
-
-## Why Gemma 4
-
-| Capability | Why it matters for Legimed |
+| Hackathon theme | How Legimed addresses it |
 |---|---|
-| Offline / on-device | Patient data never leaves the device |
-| Structured extraction | Reads medication leaflets and outputs validated JSON |
-| Native multilingual | Outputs in English, Mandarin, Malay — not translated |
-| Apache 2.0 | Any hospital or government can deploy freely |
-| Edge-optimised (E4B) | Runs on a laptop or pharmacy workstation |
+| Health & Sciences | Makes official medication information easier for patients to understand and act on. |
+| Digital Equity | Helps people with low health literacy, limited English fluency, visual difficulty, or caregiver needs. |
+| Safety & Trust | Grounds extraction in NIH DailyMed labels, validates output with Pydantic, and keeps medical-disclaimer boundaries explicit. |
+| Multimodal Gemma 4 | Uses Gemma 4 vision to read a medicine-box photo and Gemma 4 text inference to extract structured medication guidance. |
+| Local / edge inference | Runs model inference in a Colab GPU demo environment and is designed for future pharmacy-workstation or clinic-local deployment. |
 
----
+## Why This Matters
 
-## Demo
+Medication errors are often caused by misunderstanding, not lack of information. The information exists, but it is buried in long leaflets and written for professionals.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1JCgQPB0JUsRntVpPzwljnRXo01ABTuyF?usp=sharing)
+Legimed focuses on one workflow:
 
-Open the notebook in Google Colab (free T4 GPU), run all cells in order, and a public Gradio link will be generated.
+1. Identify the medicine.
+2. Retrieve the official label.
+3. Extract the parts a patient needs.
+4. Personalize warning priority.
+5. Render a guide that can be read quickly on a phone.
 
-> Hugging Face Spaces permanent deployment coming soon.
-
----
+This is intentionally not a general medical chatbot. It is a constrained, grounded pipeline for one high-impact medication-literacy task.
 
 ## How It Works
 
-```
-User enters drug name
-        ↓
-DailyMed API (NIH) → full medication leaflet text
-        ↓
-Gemma 4 E4B → structured JSON extraction (pydantic validated)
-        ↓
-Personalisation engine → warning re-prioritisation by health profile
-        ↓
-Python summary generator → 3-sentence plain-English personal summary
-        ↓
-Gradio UI → card-based visual medication guide
+```text
+User uploads medicine photo or types medicine name
+        |
+        v
+Gemma 4 vision extracts medicine name from image
+        |
+        v
+DailyMed API retrieves official NIH drug-label text
+        |
+        v
+Gemma 4 extracts validated DrugInfo JSON
+        |
+        v
+Python personalization rules reorder relevant warnings
+        |
+        v
+FastAPI returns a mobile-friendly HTML patient guide
 ```
 
----
+## Architecture
 
-## Technical Architecture
-
-```
+```text
 legimed/
 ├── src/
-│   ├── schema.py          # pydantic DrugInfo + UserProfile models
-│   ├── dailymed.py        # NIH DailyMed API integration
-│   ├── extract.py         # Gemma 4 extraction pipeline
-│   ├── personalise.py     # Personalisation engine + summary generator
-│   └── app.py             # Gradio UI with card-based HTML output
-└── requirements.txt
+│   ├── server.py       # FastAPI backend and HTML guide renderer
+│   ├── index.html      # Mobile-first frontend
+│   ├── vision.py       # Gemma 4 vision drug-name extraction
+│   ├── dailymed.py     # NIH DailyMed label retrieval
+│   ├── extract.py      # Gemma 4 structured JSON extraction
+│   ├── personalise.py  # Deterministic profile-based warning priority
+│   └── schema.py       # Pydantic data models
+├── requirements.txt
+├── LICENSE
+└── README.md
 ```
 
----
+## Gemma 4 Usage
 
-## Running Locally
+Legimed uses Gemma 4 in two places:
 
-### Requirements
-- Python 3.10+
-- GPU with 15GB+ VRAM (e.g. NVIDIA T4) — or use the Colab link above
-- Hugging Face account with Gemma 4 access
+1. Image input: `src/vision.py`
+   - Input: medication-box photo
+   - Output: a clean medicine name
+   - Method: local model inference with `processor.apply_chat_template()` and `model.generate()`
 
-### Setup
+2. Label extraction: `src/extract.py`
+   - Input: DailyMed label text plus the Pydantic JSON schema
+   - Output: validated `DrugInfo`
+   - Method: constrained JSON extraction, followed by validation and small enum cleanup
+
+The personalization summary is deliberately deterministic Python logic, not another model call. This keeps the medical personalization step auditable and easier to debug.
+
+## Demo
+
+The current demo is built for Google Colab because Gemma 4 local inference needs GPU memory that may not be available on a typical laptop.
+
+[Open the Colab demo](https://colab.research.google.com/drive/1JCgQPB0JUsRntVpPzwljnRXo01ABTuyF?usp=sharing)
+
+Recommended Colab flow:
 
 ```bash
-git clone https://github.com/LorraineWong/legimed.git
-cd legimed
+git clone https://github.com/LorraineWong/legimed.git /content/legimed
+cd /content/legimed
 pip install -r requirements.txt
+pip install torch transformers accelerate
 ```
 
-### Run
+Then load the Gemma 4 model and processor in the notebook, and launch the FastAPI app:
 
 ```python
-from transformers import AutoTokenizer, AutoModelForCausalLM, AutoProcessor
-import torch, sys
+import sys
+sys.path.insert(0, "/content/legimed/src")
 
-sys.path.insert(0, 'src')
+# Load your approved Gemma 4 checkpoint here.
+# The exact model class and model id should match the checkpoint used in the Kaggle submission notebook.
+model = ...
+processor = ...
 
-tokenizer = AutoTokenizer.from_pretrained("google/gemma-3-4b-it")
-processor = AutoProcessor.from_pretrained("google/gemma-3-4b-it")
-model = AutoModelForCausalLM.from_pretrained(
-    "google/gemma-3-4b-it",
-    torch_dtype=torch.bfloat16,
-    device_map="auto"
-)
-
-from app import build_demo
-demo = build_demo(model, tokenizer, processor)
-demo.launch()
+from server import launch
+launch(model, processor, port=7860)
 ```
 
-If you see `TypeError: build_demo() missing 1 required positional argument: 'processor'`, update your Colab launch cell to:
+If running in Colab, expose port `7860` using the tunnel method in the notebook so judges can open the demo UI.
+
+## API Endpoints
+
+`GET /`
+
+Serves the mobile web UI from `src/index.html`.
+
+`POST /scan`
+
+Input:
+
+```json
+{
+  "image_b64": "base64-encoded-image"
+}
+```
+
+Output:
+
+```json
+{
+  "ok": true,
+  "drug_name": "Metformin",
+  "method": "gemma4"
+}
+```
+
+`POST /generate`
+
+Input:
+
+```json
+{
+  "drug_name": "warfarin",
+  "age_group": "elderly",
+  "sex": "female",
+  "pregnant": false,
+  "breastfeeding": false,
+  "kidney_issue": false,
+  "liver_issue": false,
+  "heart_condition": true,
+  "diabetes": false,
+  "hypertension": true,
+  "asthma": false,
+  "allergies": "aspirin",
+  "other_medications": "metformin, lisinopril"
+}
+```
+
+Output:
+
+```json
+{
+  "ok": true,
+  "html": "<div>...</div>"
+}
+```
+
+## Safety Design
+
+Legimed includes several safety boundaries:
+
+- It uses official DailyMed label text as the source document.
+- It validates model output against Pydantic models before rendering.
+- It uses fixed enums for severity, food interaction action, and dosage timing.
+- It keeps personalization rule-based and inspectable.
+- It avoids diagnosis and prescribing claims.
+- It displays clear "for reference only" medical disclaimers.
+
+Known limitations:
+
+- DailyMed search currently uses the first matching result, which may not always be the exact brand, strength, or formulation.
+- Dosage text is extracted from labels by the model and must be checked against the patient's actual prescription label.
+- The prototype currently focuses on English output.
+- The demo depends on internet access for DailyMed retrieval, although Gemma inference itself is local.
+- This is a hackathon prototype, not a certified medical device.
+
+## Evaluation Helper
+
+The repo includes a small smoke-test helper for the Kaggle writeup:
 
 ```python
-demo = build_demo(model, tokenizer, processor)
+import sys
+sys.path.insert(0, "/content/legimed")
+
+from scripts.evaluate_drugs import evaluate_drugs, print_markdown_table
+
+results = evaluate_drugs(model, processor)
+print_markdown_table(results)
 ```
 
-
----
+It runs common drug names through DailyMed retrieval, Gemma JSON extraction, Pydantic validation, personalization, and guide rendering. The output can be pasted into the Kaggle submission writeup as a simple reproducibility table.
 
 ## Tech Stack
 
 | Layer | Technology |
 |---|---|
-| AI Model | Gemma 4 E4B — google/gemma-3-4b-it |
-| Dev Environment | Google Colab (T4 GPU) |
-| Drug Data | NIH DailyMed API (free, no API key required) |
-| Structured Output | pydantic v2 |
-| Personalisation | Python rule engine |
-| UI | Gradio with card-based HTML output |
-| Demo Hosting | Hugging Face Spaces (coming soon) |
-
----
-
-## Personalisation
-
-The same drug produces a **different guide** for different patients:
-
-| Profile | What changes |
-|---|---|
-| Senior (65+) | Fall risk and INR monitoring elevated to top |
-| Pregnant | Contraindication shown as top priority warning |
-| Kidney condition | Renal processing note added to summary |
-| Other medications | Drug interaction warnings prioritised |
-| Healthy adult | Simplified guide focused on dosage and common side effects |
-
----
+| Model inference | Gemma 4 local inference |
+| Vision input | Gemma 4 multimodal chat template |
+| Structured output | Pydantic v2 |
+| Drug source | NIH DailyMed API |
+| Backend | FastAPI + Uvicorn |
+| Frontend | Single-file mobile HTML/CSS/JS |
+| Demo environment | Google Colab GPU |
 
 ## Roadmap
 
-- [x] Core pipeline: drug name → personalized visual guide
-- [x] NIH DailyMed API integration
-- [x] Personalisation engine
-- [x] Card-based HTML infographic output
-- [x] Personal summary generation
-- [x] Gradio web interface
-- [ ] Hugging Face Spaces permanent deployment
-- [ ] Image input — scan drug box photo (Gemma 4 vision)
-- [ ] Multilingual output (Mandarin, Malay)
-- [ ] Drug interaction detection across multiple medications
-- [ ] Medication reminders (v2.0)
-- [ ] Course tracker — when to stop or refill (v2.0)
-- [ ] Family medication profiles (v2.0)
+- [x] Drug name input
+- [x] Medicine-box image input
+- [x] DailyMed label retrieval
+- [x] Gemma-based structured extraction
+- [x] Profile-aware warning prioritization
+- [x] Mobile-first visual guide
+- [ ] Stronger DailyMed result selection and formulation confirmation
+- [ ] More robust JSON repair and extraction diagnostics
+- [ ] Multilingual output for Mandarin, Malay, and Spanish
+- [ ] Source citations linking each warning back to the label section
+- [ ] Medication interaction checks across multiple drugs
+- [ ] Offline packaged label cache for low-connectivity clinics
 
----
+## Project Status
 
-## Social Impact
+Legimed is an open-source hackathon prototype built for the Kaggle Gemma 4 Good Hackathon.
 
-Designed as open-source infrastructure for:
+Primary target track: Health & Sciences.
 
-- **Hospitals** — integrate into patient discharge workflow
-- **Ministries of Health** — multilingual public health deployment
-- **Pharmaceutical companies** — replace dense printed inserts
-- **Health tech companies** — API / white-label integration
+Additional fit: Digital Equity, Safety & Trust, and edge/local inference.
 
-> *"Drug bag labels tell you when and how much. Legimed tells you why, what to watch for, and what to never do — in plain language you can actually understand."*
+Author: Lorraine Wong
 
----
-
-## License
-
-Apache 2.0 — free for commercial and institutional use.
-
----
-
-## Hackathon
-
-Built for the [Gemma 4 Good Hackathon](https://www.kaggle.com/competitions/gemma-4-good-hackathon) by Kaggle × Google DeepMind.
-
-**Track:** Health & Sciences · Impact
-**Deadline:** May 18, 2026
-**Author:** Lorraine Wong
+License: Apache 2.0
