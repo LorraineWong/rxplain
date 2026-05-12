@@ -232,7 +232,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   </div>
 
   <!-- Step 2: Medication -->
-  <div class="step-hdr">
+  <div class="step-hdr" id="step2-hdr">
     <div class="step-num">2</div>
     <div>
       <div class="step-title">Medicine</div>
@@ -300,6 +300,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       <div style="font-size:13px;line-height:1.6;">
         Fill in your profile and medicine name, then tap Generate.</div>
     </div>
+  </div>
+
+  <div id="new-medicine-btn" style="display:none;margin-top:4px;margin-bottom:4px;">
+    <button onclick="resetMedicine()" style="width:100%;padding:12px;border-radius:999px;
+      border:1.5px solid #00A878;background:#fff;color:#00A878;font-size:14px;
+      font-weight:600;cursor:pointer;transition:all .15s;"
+      onmouseover="this.style.background='#ECFDF5'"
+      onmouseout="this.style.background='#fff'">
+      Check Another Medicine →</button>
   </div>
 
   <div class="footer">
@@ -543,9 +552,24 @@ function setFormDisabled(lock) {
   if (saveBtn) { saveBtn.disabled = lock; saveBtn.style.opacity = lock ? '0.5' : ''; }
 }
 
+function resetMedicine() {
+  clearImage();
+  document.getElementById('output').innerHTML =
+    '<div class="output-empty">' +
+    '<div style="font-size:32px;margin-bottom:8px;">📋</div>' +
+    '<div style="font-size:15px;font-weight:700;color:#1A202C;margin-bottom:6px;">Your guide will appear here</div>' +
+    '<div style="font-size:13px;line-height:1.6;">Fill in your profile and medicine name, then tap Generate.</div>' +
+    '</div>';
+  document.getElementById('new-medicine-btn').style.display = 'none';
+  document.getElementById('step2-hdr').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
 // ── Generate ──────────────────────────────────────────────────────────────────
 function doGenerate() {
   sync();
+  if (document.getElementById('profile-cards').style.display !== 'none') {
+    saveProfile();
+  }
   if (!state.drug_name.trim()) {
     document.getElementById('output').innerHTML =
       '<div style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:12px;' +
@@ -591,6 +615,7 @@ function doGenerate() {
     setFormDisabled(false);
     if (data.ok) {
       document.getElementById('output').innerHTML = data.html;
+      document.getElementById('new-medicine-btn').style.display = 'block';
     } else {
       document.getElementById('output').innerHTML =
         '<div style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:12px;' +

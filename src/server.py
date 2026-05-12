@@ -6,6 +6,7 @@ Replaces Gradio. Serves the HTML frontend and exposes two API endpoints.
 import base64
 import gc
 import json
+import os
 import re
 from io import BytesIO
 
@@ -238,7 +239,8 @@ def format_guide(drug_info, personal_summary: str) -> str:
 
 @app.get("/", response_class=HTMLResponse)
 async def index():
-    with open("/content/legimed/src/index.html", "r") as f:
+    html_path = os.path.join(os.path.dirname(__file__), "index.html")
+    with open(html_path, "r") as f:
         return f.read()
 
 

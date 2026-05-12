@@ -57,6 +57,11 @@ def personalise(drug_info: DrugInfo, profile: UserProfile) -> DrugInfo:
             ]):
                 is_priority = True
 
+        if profile.allergies:
+            for allergy in profile.allergies:
+                if allergy.lower() in text_lower:
+                    is_priority = True
+
         if profile.other_medications:
             for med in profile.other_medications:
                 if med.lower() in text_lower:
@@ -139,6 +144,11 @@ def generate_personal_summary(drug_info: DrugInfo, profile: UserProfile) -> str:
         risk_parts.append("monitor your blood sugar closely while taking this drug")
     if profile.hypertension:
         risk_parts.append("this drug may affect your blood pressure")
+    if profile.allergies:
+        allergy_str = ", ".join(profile.allergies[:2])
+        risk_parts.append(
+            f"you have listed {allergy_str} as known allergies — confirm with your pharmacist before taking this drug"
+        )
     if profile.other_medications:
         meds = ", ".join(profile.other_medications[:2])
         risk_parts.append(f"taking {meds} alongside requires careful monitoring")
