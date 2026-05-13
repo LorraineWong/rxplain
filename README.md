@@ -21,9 +21,13 @@
 
 ## The Problem
 
-Medication leaflets are written for pharmacists, not patients. The information needed to take a drug safely — which side effects matter for *you*, what foods to avoid, when to call a doctor — is buried in pages of clinical text most patients cannot parse.
+A standard Warfarin leaflet: **5,000+ words · 8pt font · Dense medical terminology · No visuals · English only.**
 
-This is not an information gap. It is a comprehension gap. Nearly half of primary care patients misunderstand common dosage instructions on their prescription labels, and for those with limited health literacy the risk of misreading a warning label is 3.4× higher ([Davis et al., *Annals of Internal Medicine*, 2006](https://www.acpjournals.org/doi/10.7326/0003-4819-145-12-200612190-00144)). It disproportionately affects older adults, non-native speakers, and anyone managing a complex condition without reliable access to a clinician.
+A patient picks it up, reads two lines, and puts it down. Then they guess.
+
+Medication leaflets are written for pharmacists, not patients — and the consequences are real. Nearly half of primary care patients misunderstand common dosage instructions on their prescription labels. For those with limited health literacy, the risk of misreading a warning label is 3.4× higher ([Davis et al., *Annals of Internal Medicine*, 2006](https://www.acpjournals.org/doi/10.7326/0003-4819-145-12-200612190-00144)). An estimated 125,000 people in the US alone die each year from preventable medication non-adherence.
+
+This is not an information gap. It is a comprehension gap — and it disproportionately affects older adults, non-native speakers, and anyone managing a complex condition without reliable access to a clinician.
 
 ---
 
