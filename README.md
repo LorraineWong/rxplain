@@ -103,7 +103,7 @@ End-to-end smoke test across 10 common medications on Google Colab (L4 GPU):
 
 ## Demo
 
-📺 **[Watch the demo video](https://your-video-link-here)**
+📺 **[Watch the demo video](https://youtu.be/Z60CHS4Y0KA)**
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1JCgQPB0JUsRntVpPzwljnRXo01ABTuyF?usp=sharing)
 
