@@ -86,18 +86,18 @@ End-to-end smoke test across 10 common medications on Google Colab (L4 GPU):
 
 | Drug | DailyMed | JSON valid | Guide | Seconds |
 |---|:---:|:---:|:---:|---:|
-| warfarin | ✅ | ✅ | ✅ | 60.2 |
-| metformin | ✅ | ✅ | ✅ | 75.2 |
-| ibuprofen | ✅ | ✅ | ✅ | 69.9 |
-| amoxicillin | ✅ | ✅ | ✅ | 74.2 |
-| atorvastatin | ✅ | ✅ | ✅ | 88.5 |
-| lisinopril | ✅ | ✅ | ✅ | 80.4 |
-| omeprazole | ✅ | ✅ | ✅ | 60.8 |
-| albuterol | ✅ | ✅ | ✅ | 62.9 |
-| levothyroxine | ✅ | ✅ | ✅ | 64.3 |
-| acetaminophen | ✅ | ✅ | ✅ | 68.3 |
+| warfarin | ✅ | ✅ | ✅ | 57.39 |
+| metformin | ✅ | ✅ | ✅ | 64.96 |
+| ibuprofen | ✅ | ✅ | ✅ | 66.96 |
+| amoxicillin | ✅ | ✅ | ✅ | 90.83 |
+| atorvastatin | ✅ | ✅ | ✅ | 84.43 |
+| lisinopril | ✅ | ✅ | ✅ | 86.19 |
+| omeprazole | ✅ | ✅ | ✅ | 56.19 |
+| albuterol | ✅ | ✅ | ✅ | 57.57 |
+| levothyroxine | ✅ | ✅ | ✅ | 59.49 |
+| acetaminophen | ✅ | ✅ | ✅ | 59.98 |
 
-**10 / 10 guides generated successfully** — avg 70 s per guide on L4 GPU. Each passed DailyMed retrieval, Pydantic schema validation, and full HTML render. Reproducible via `scripts/evaluate_drugs.py`.
+**10 / 10 guides generated successfully** — avg 68 s per guide on L4 GPU. Each passed DailyMed retrieval, Pydantic schema validation, and full HTML render. Reproducible via `scripts/evaluate_drugs.py`.
 
 ---
 
