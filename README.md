@@ -101,27 +101,6 @@ End-to-end smoke test across 10 common medications on Google Colab (L4 GPU):
 
 ---
 
-## Demo
-
-📺 **[Watch the demo video](https://youtu.be/Z60CHS4Y0KA)**
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1JCgQPB0JUsRntVpPzwljnRXo01ABTuyF?usp=sharing)
-
-> **Requires a GPU runtime.** In Colab: *Runtime → Change runtime type → L4 GPU* (or equivalent).
-
-The notebook is a self-contained six-cell pipeline — open it and run all cells in order:
-
-| Cell | What it does |
-|---|---|
-| 1 · Environment Check | Verifies GPU availability and Python version |
-| 2 · Install Dependencies | Installs `requirements.txt` and `torch transformers accelerate` |
-| 3 · Load Model | Downloads and loads the Gemma 4 checkpoint (~10 min on first run) |
-| 4 · Load Source Modules | Imports the Rxplain pipeline from `src/` |
-| 5 · Launch | Starts the FastAPI server on port 7860 — open the Colab tunnel URL to use the UI |
-| 6 · Evaluate *(optional)* | Runs `evaluate_drugs()` smoke test across 10 common medications |
-
----
-
 ## Hackathon Track Fit
 
 | Track | How Rxplain qualifies |
@@ -192,6 +171,33 @@ The comprehension gap Rxplain addresses is global. Five directions with the high
 **Multi-drug interaction checks** — The patients who need Rxplain most — older adults managing chronic conditions — are also the most likely to be on multiple medications. Surfacing interactions across a user's full medication list is the natural next step for the health profile already collected.
 
 **Offline label cache** — Digital equity means reaching users in low-bandwidth environments. Pre-caching common drug labels removes the DailyMed API dependency and makes Rxplain viable in rural clinics and underserved communities.
+
+---
+
+## Demo
+
+**Rxplain — Personalized Medication Guides Powered by Gemma 4**
+
+<p align="center">
+  <a href="https://youtu.be/Z60CHS4Y0KA">
+    <img src="https://img.youtube.com/vi/Z60CHS4Y0KA/maxresdefault.jpg" alt="Watch the Rxplain demo" width="720"/>
+  </a>
+</p>
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1JCgQPB0JUsRntVpPzwljnRXo01ABTuyF?usp=sharing)
+
+> **Requires a GPU runtime.** In Colab: *Runtime → Change runtime type → L4 GPU* (or equivalent).
+
+The notebook is a self-contained six-cell pipeline — open it and run all cells in order:
+
+| Cell | What it does |
+|---|---|
+| 1 · Environment Check | Verifies GPU availability and Python version |
+| 2 · Install Dependencies | Installs `requirements.txt` and `torch transformers accelerate` |
+| 3 · Load Model | Downloads and loads the Gemma 4 checkpoint (~10 min on first run) |
+| 4 · Load Source Modules | Imports the Rxplain pipeline from `src/` |
+| 5 · Launch | Starts the FastAPI server on port 7860 — open the Colab tunnel URL to use the UI |
+| 6 · Evaluate *(optional)* | Runs `evaluate_drugs()` smoke test across 10 common medications |
 
 ---
 
